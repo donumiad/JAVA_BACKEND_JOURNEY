@@ -1,0 +1,20 @@
+FLUXO DE TRABALHO DE ALTERAÇÃO PARA GIT
+
+Ação,          			Comando,                    			Por que fazer?
+Atualizar,  			git pull origin main,        			Para não trabalhar em código defasado.
+Isolar,				git checkout -b feature/nova-vaga,		Para proteger a versão estável do software.
+Trabalhar,			git add + git commit,				Para registrar seu progresso passo a passo.
+Publicar,			git push,					Para que outros vejam e seu trabalho fique salvo na nuvem.
+
+COMANDO PARA TRABALHAR COM BRANCH =======================================================
+
+Ação				Comando					Observações
+Criar uma nova branch		git checkout -b nome-da-tarefa		Nomenclatura sugerida:  feature/nome-da-funcao: Para novas funcionalidades. 
+	=				=							bugfix/descricao-do-erro: Para corrigir falhas.
+	=				=							hotfix/urgente: Para erros críticos que precisam ser resolvidos na hora.
+Voltar para a main		git checkout main
+Atualizando a main		git merge nome-da-tarefa	
+Deletar branch			git branch -d nome-da-tarefa	
+Lista as branches existentes	git branch
+Olha o que tem de novo		git fetch
+Armario temporário		git stash
