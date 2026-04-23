@@ -6,13 +6,13 @@ import modulos.poo_java.LIST_SET_MAP.enumclasses.Status;
 import java.util.Objects;
 
 public class Task {
-    private int id;
+    private Long id;
     private String titulo;
     private String descricao;
     private Status status;
     private Prioridade prioridade;
 
-    public Task(int id, String titulo, String descricao, Status status, Prioridade prioridade) {
+    public Task(Long id, String titulo, String descricao, Status status, Prioridade prioridade) {
         this.id = id;
         this.titulo = titulo;
         this.descricao = descricao;
@@ -20,7 +20,7 @@ public class Task {
         this.prioridade = prioridade;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 

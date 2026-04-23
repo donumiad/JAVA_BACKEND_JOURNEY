@@ -5,6 +5,7 @@ import modulos.poo_java.LIST_SET_MAP.classes.Task;
 import java.util.ArrayList;
 import java.util.List;
 
+import modulos.poo_java.LIST_SET_MAP.classes.TaskRepositoryMemoria;
 import modulos.poo_java.LIST_SET_MAP.enumclasses.Prioridade;
 import modulos.poo_java.LIST_SET_MAP.enumclasses.Status;
 
@@ -12,37 +13,20 @@ import modulos.poo_java.LIST_SET_MAP.enumclasses.Status;
 
 public class MainTerca {
     public static void main(String[] args) {
-        List<Task> tarefas = new ArrayList<>();
+        TaskRepositoryMemoria repositorio = new TaskRepositoryMemoria();
 
-        //tarefas.add(1,"primeira tarefa", "teste da task", NAO_INICIADO, ALTA);
+        repositorio.adicionar(new Task(1L, "Estudar List", "Aprender listas", Status.PENDENTE, Prioridade.ALTA));
+        repositorio.adicionar(new Task(2L, "Estudar Set", "Aprender conjuntos", Status.EM_ANDAMENTO, Prioridade.MEDIA));
+        repositorio.adicionar(new Task(3L, "Estudar Map", "Aprender mapeamentos", Status.PENDENTE, Prioridade.ALTA));
+        repositorio.adicionar(new Task(4L, "Praticar enum", "Treinar Status e Prioridade", Status.CONCLUIDO, Prioridade.BAIXA));
+        repositorio.adicionar(new Task(5L, "Revisar toString", "Melhorar impressão de objetos", Status.PENDENTE, Prioridade.MEDIA));
 
-        Task task1 = new Task(1,
-                "primeira task",
-                "treino do list",
-                Status.NAO_INICIADO,
-                Prioridade.ALTA);
+        repositorio.listarTodas();
+        repositorio.removerPorId(3L);
+        repositorio.listarTodas();
 
-        Task task12 = new Task(2,
-                "segunda task",
-                "treino do list 2",
-                Status.EM_ANDAMENTO,
-                Prioridade.URGENTE);
-
-        Task task3 = new Task(3,
-                "terceira task",
-                "treino do list 3",
-                Status.CONCLUIDO,
-                Prioridade.BAIXA);
-
-        List<Task> tasks = new ArrayList<>();
-
-        tasks.add(task1);
-        tasks.add(task12);
-        tasks.add(task3);
-
-        for(Task task: tasks ){
-            System.out.println(task);
-        }
 
     }
 }
+
+
