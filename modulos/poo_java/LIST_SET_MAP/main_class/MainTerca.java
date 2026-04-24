@@ -16,7 +16,7 @@ public class MainTerca {
         TaskRepositoryMemoria repositorio = new TaskRepositoryMemoria();
 
         repositorio.adicionar(new Task(1L, "Estudar List", "Aprender listas", Status.PENDENTE, Prioridade.ALTA));
-        repositorio.adicionar(new Task(2L, "Estudar Set", "Aprender conjuntos", Status.EM_ANDAMENTO, Prioridade.MEDIA));
+        repositorio.adicionar(new Task(1L, "Estudar Set", "Aprender conjuntos", Status.EM_ANDAMENTO, Prioridade.MEDIA));
         repositorio.adicionar(new Task(3L, "Estudar Map", "Aprender mapeamentos", Status.PENDENTE, Prioridade.ALTA));
         repositorio.adicionar(new Task(4L, "Praticar enum", "Treinar Status e Prioridade", Status.CONCLUIDO, Prioridade.BAIXA));
         repositorio.adicionar(new Task(5L, "Revisar toString", "Melhorar impressão de objetos", Status.PENDENTE, Prioridade.MEDIA));

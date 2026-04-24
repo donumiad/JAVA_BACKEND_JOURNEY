@@ -1,10 +1,12 @@
 package modulos.poo_java.LIST_SET_MAP.classes;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class TaskRepositoryMemoria {
-    private List<Task> tarefas = new ArrayList<>();
+    private Set<Task> tarefas = new HashSet<>();
 
     public void adicionar(Task task){
         tarefas.add(task);
