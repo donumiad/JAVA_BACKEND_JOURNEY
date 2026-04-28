@@ -19,7 +19,6 @@ public class TaskMapRepositoryMemoria {
     }
 
     public Task buscaPorId(Long id){
-        if(tarefas.get(id).equals(null)){return null;}
         return tarefas.get(id);
     }
 

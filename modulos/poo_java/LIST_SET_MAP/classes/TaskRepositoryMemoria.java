@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 public class TaskRepositoryMemoria {
-    private Set<Task> tarefas = new HashSet<>();
+    private List<Task> tarefas = new ArrayList<>();
 
     public void adicionar(Task task){
         tarefas.add(task);

@@ -8,6 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 import modulos.poo_java.LIST_SET_MAP.classes.TaskRepositoryMemoria;
 
+METODOS IMPORTANTES
+put()
+get()
+containsKey()
+containsValue()
+remove()
+size()
+isEmpty()
+clear()
 */
 import modulos.poo_java.LIST_SET_MAP.classes.Task;
 import modulos.poo_java.LIST_SET_MAP.enumclasses.Prioridade;
@@ -25,11 +34,15 @@ public class MainTerca {
         repositorio.adicionar(4L, new Task(4L, "Praticar enum", "Treinar Status e Prioridade", Status.CONCLUIDO, Prioridade.BAIXA));
         repositorio.adicionar(5L, new Task(5L, "Revisar toString", "Melhorar impressão de objetos", Status.PENDENTE, Prioridade.MEDIA));
 
+
+        repositorio.buscaPorId(6L);
+
+        /*
         repositorio.listarTodas();
         System.out.println("");
         repositorio.removerPorId(3L);
         repositorio.listarTodas();
-        System.out.println("");
+        System.out.println("");*/
 
         /*
         CODIGO PARA LIST E SET
