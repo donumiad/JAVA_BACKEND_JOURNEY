@@ -1,7 +1,4 @@
-package modulos.poo_java.LIST_SET_MAP.classes;
-
-import modulos.poo_java.LIST_SET_MAP.enumclasses.Prioridade;
-import modulos.poo_java.LIST_SET_MAP.enumclasses.Status;
+package br.com.raimundo.taskmanager.model;
 
 import java.util.Objects;
 

@@ -1,9 +1,9 @@
-package modulos.poo_java.LIST_SET_MAP.classes;
+package br.com.raimundo.taskmanager.repository;
+
+import br.com.raimundo.taskmanager.model.Task;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class TaskRepositoryMemoria {
     private List<Task> tarefas = new ArrayList<>();

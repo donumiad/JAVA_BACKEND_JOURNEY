@@ -1,4 +1,4 @@
-package modulos.poo_java.LIST_SET_MAP.main_class;
+package br.com.raimundo.taskmanager.testes;
 
 
 /*
@@ -18,10 +18,11 @@ size()
 isEmpty()
 clear()
 */
-import modulos.poo_java.LIST_SET_MAP.classes.Task;
-import modulos.poo_java.LIST_SET_MAP.enumclasses.Prioridade;
-import modulos.poo_java.LIST_SET_MAP.enumclasses.Status;
-import modulos.poo_java.LIST_SET_MAP.classes.TaskMapRepositoryMemoria;
+
+import br.com.raimundo.taskmanager.model.Prioridade;
+import br.com.raimundo.taskmanager.model.Status;
+import br.com.raimundo.taskmanager.model.Task;
+import br.com.raimundo.taskmanager.repository.TaskMapRepositoryMemoria;
 
 public class MainTerca {
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package modulos.poo_java.LIST_SET_MAP.enumclasses;
+package br.com.raimundo.taskmanager.model;
 
 public enum Status {
     CONCLUIDO, PENDENTE, ATRAZADO, NAO_INICIADO, EM_ANDAMENTO;

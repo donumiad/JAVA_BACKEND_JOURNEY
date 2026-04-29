@@ -1,4 +1,4 @@
-package modulos.poo_java.LIST_SET_MAP.enumclasses;
+package br.com.raimundo.taskmanager.model;
 
 public enum Prioridade {
     URGENTE, ALTA, MEDIA, BAIXA, MINIMA;

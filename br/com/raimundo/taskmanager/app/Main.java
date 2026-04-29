@@ -1,7 +1,7 @@
-package modulos.poo_java.LIST_SET_MAP.main_class;
+package br.com.raimundo.taskmanager.app;
 
-import modulos.poo_java.LIST_SET_MAP.classes.Produto;
-import modulos.poo_java.LIST_SET_MAP.classes.SetProduto;
+import br.com.raimundo.taskmanager.testes.Produto;
+import br.com.raimundo.taskmanager.testes.SetProduto;
 
 import java.util.ArrayList;
 import java.util.List;

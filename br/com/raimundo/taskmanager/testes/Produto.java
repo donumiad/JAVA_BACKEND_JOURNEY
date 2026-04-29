@@ -1,4 +1,4 @@
-package modulos.poo_java.LIST_SET_MAP.classes;
+package br.com.raimundo.taskmanager.testes;
 
 public class Produto {
     private String nome;
