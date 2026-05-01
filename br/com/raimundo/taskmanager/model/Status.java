@@ -1,5 +1,9 @@
 package br.com.raimundo.taskmanager.model;
 
 public enum Status {
-    CONCLUIDO, PENDENTE, ATRAZADO, NAO_INICIADO, EM_ANDAMENTO;
+    CONCLUIDO,
+    EM_ANDAMENTO,
+    ATRAZADO,
+    PENDENTE,
+    NAO_INICIADO ;
 }

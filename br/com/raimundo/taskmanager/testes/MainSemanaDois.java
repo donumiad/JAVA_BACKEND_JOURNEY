@@ -12,7 +12,7 @@ import java.util.List;
 public class MainSemanaDois {
 
     public static void main(String[] args) {
-
+/*
         List<Task> tarefaGeneric = new ArrayList<>();
         tarefaGeneric.add(new Task(1L, "Estudar List", "Revisar coleções", Status.PENDENTE, Prioridade.ALTA));
         tarefaGeneric.add(new Task(2L, "Estudar generics", "Criar Box e Repositorio", Status.EM_ANDAMENTO, Prioridade.MEDIA));
@@ -20,7 +20,7 @@ public class MainSemanaDois {
 
         CollectionUtils.imprimirLista(tarefaGeneric);
         int tamanhoDaLista = CollectionUtils.contarElementos(tarefaGeneric);
-        System.out.println(tamanhoDaLista);
+        System.out.println(tamanhoDaLista);*/
     }
 }
 

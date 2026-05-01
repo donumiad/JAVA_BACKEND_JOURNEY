@@ -1,5 +1,6 @@
 package br.com.raimundo.taskmanager.model;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class Task {
@@ -8,13 +9,15 @@ public class Task {
     private String descricao;
     private Status status;
     private Prioridade prioridade;
+    private LocalDate dataLimite;
 
-    public Task(Long id, String titulo, String descricao, Status status, Prioridade prioridade) {
+    public Task(Long id, String titulo, String descricao, Status status, Prioridade prioridade, LocalDate dataLimite) {
         this.id = id;
         this.titulo = titulo;
         this.descricao = descricao;
         this.status = status;
         this.prioridade = prioridade;
+        this.dataLimite = dataLimite;
     }
 
     public Long getId() {
@@ -36,6 +39,8 @@ public class Task {
     public Prioridade getPrioridade() {
         return prioridade;
     }
+
+    public LocalDate getDataLimite(){ return dataLimite;}
 
     @Override
     public boolean equals(Object o) {

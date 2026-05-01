@@ -1,12 +1,16 @@
 package br.com.raimundo.taskmanager.app;
 
+import br.com.raimundo.taskmanager.comparator.TaskPorDataComparator;
+import br.com.raimundo.taskmanager.comparator.TaskPorPrioridadeComparator;
+import br.com.raimundo.taskmanager.comparator.TaskPorTituloComparator;
+import br.com.raimundo.taskmanager.model.Prioridade;
+import br.com.raimundo.taskmanager.model.Status;
+import br.com.raimundo.taskmanager.model.Task;
 import br.com.raimundo.taskmanager.testes.Produto;
 import br.com.raimundo.taskmanager.testes.SetProduto;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.*;
 
 /*LIST
 * mantém ordem de inserção na maioria dos usos práticos
@@ -24,7 +28,62 @@ import java.util.Set;
 
 public class Main {
     public static void main(String[] args) {
-        List<String> nomes = new ArrayList<>();
+
+        List<Task> tarefas = new ArrayList<>();
+
+        tarefas.add(new Task(
+                1L,
+                "Trabalhar List",
+                "Aprender listas",
+                Status.PENDENTE,
+                Prioridade.ALTA,
+                LocalDate.of(2026,5,8)));
+        tarefas.add(new Task(
+                2L,
+                "Preparar Set",
+                "Aprender conjuntos",
+                Status.EM_ANDAMENTO,
+                Prioridade.MEDIA,
+                LocalDate.of(2026,5,6)));
+        tarefas.add(new Task(3L,
+                "Estudar Map",
+                "Aprender mapeamentos",
+                Status.PENDENTE,
+                Prioridade.BAIXA,
+                LocalDate.of(2026,4,30)));
+        tarefas.add(new Task(
+                4L,
+                "Criar enum",
+                "Treinar Status e Prioridade",
+                Status.CONCLUIDO,
+                Prioridade.MINIMA,
+                LocalDate.of(2026,4,25)));
+        tarefas.add(new Task(
+                5L,
+                "Analisar toString",
+                "Melhorar impressão de objetos",
+                Status.PENDENTE,
+                Prioridade.URGENTE,
+                LocalDate.of(2026,5,10)));
+
+        System.out.println("ANTES DA ORDENACAO");
+        for (Task listaTask: tarefas) {
+            System.out.println(listaTask);
+        }
+
+        Collections.sort(tarefas, new TaskPorDataComparator());
+        System.out.println("DEPOIS");
+        for (Task listaTask: tarefas) {
+            System.out.println(listaTask);
+        }
+
+    }
+}
+
+
+/*
+*
+* List<String> nomes = new ArrayList<>();
 
         nomes.add("Ana");
         nomes.add("Carlos");
@@ -57,5 +116,4 @@ public class Main {
         for (SetProduto setproduto : setprodutos) {
             System.out.println(setproduto);
         }
-    }
-}
+* */

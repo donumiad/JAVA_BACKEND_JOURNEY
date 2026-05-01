@@ -1,7 +1,21 @@
 package br.com.raimundo.taskmanager.testes;
 
+import br.com.raimundo.taskmanager.model.Prioridade;
+import br.com.raimundo.taskmanager.model.Status;
+import br.com.raimundo.taskmanager.model.Task;
+import br.com.raimundo.taskmanager.repository.TaskMapRepositoryMemoria;
 
-/*
+import java.time.LocalDate;
+
+public class MainTerca {
+    public static void main(String[] args) {
+
+
+    }
+}
+
+
+        /*
 CODIGO PARA LIST E SET
 
 import java.util.ArrayList;
@@ -17,35 +31,24 @@ remove()
 size()
 isEmpty()
 clear()
-*/
-
-import br.com.raimundo.taskmanager.model.Prioridade;
-import br.com.raimundo.taskmanager.model.Status;
-import br.com.raimundo.taskmanager.model.Task;
-import br.com.raimundo.taskmanager.repository.TaskMapRepositoryMemoria;
-
-public class MainTerca {
-    public static void main(String[] args) {
-        TaskMapRepositoryMemoria repositorio = new TaskMapRepositoryMemoria();
 
 
-        repositorio.adicionar(1L, new Task(1L, "Estudar List", "Aprender listas", Status.PENDENTE, Prioridade.ALTA));
-        repositorio.adicionar(2L, new Task(1L, "Estudar Set", "Aprender conjuntos", Status.EM_ANDAMENTO, Prioridade.MEDIA));
-        repositorio.adicionar(3L, new Task(3L, "Estudar Map", "Aprender mapeamentos", Status.PENDENTE, Prioridade.ALTA));
-        repositorio.adicionar(4L, new Task(4L, "Praticar enum", "Treinar Status e Prioridade", Status.CONCLUIDO, Prioridade.BAIXA));
-        repositorio.adicionar(5L, new Task(5L, "Revisar toString", "Melhorar impressão de objetos", Status.PENDENTE, Prioridade.MEDIA));
+         TaskMapRepositoryMemoria repositorio = new TaskMapRepositoryMemoria();
 
 
-        repositorio.buscaPorId(6L);
+        repositorio.adicionar(1L, new Task(1L, "Estudar List", "Aprender listas", Status.PENDENTE, Prioridade.ALTA, LocalDate.of(2026,5,8)));
+        repositorio.adicionar(2L, new Task(1L, "Estudar Set", "Aprender conjuntos", Status.EM_ANDAMENTO, Prioridade.MEDIA,LocalDate.of(2026,5,8)));
+        repositorio.adicionar(3L, new Task(3L, "Estudar Map", "Aprender mapeamentos", Status.PENDENTE, Prioridade.ALTA,LocalDate.of(2026,5,8)));
+        repositorio.adicionar(4L, new Task(4L, "Praticar enum", "Treinar Status e Prioridade", Status.CONCLUIDO, Prioridade.BAIXA,LocalDate.of(2026,5,8)));
+        repositorio.adicionar(5L, new Task(5L, "Revisar toString", "Melhorar impressão de objetos", Status.PENDENTE, Prioridade.MEDIA,LocalDate.of(2026,5,8)));
 
-        /*
         repositorio.listarTodas();
         System.out.println("");
         repositorio.removerPorId(3L);
         repositorio.listarTodas();
-        System.out.println("");*/
+        System.out.println("");
 
-        /*
+
         CODIGO PARA LIST E SET
         TaskRepositoryMemoria repositorio = new TaskRepositoryMemoria();
         repositorio.adicionar(new Task(1L, "Estudar List", "Aprender listas", Status.PENDENTE, Prioridade.ALTA));
@@ -58,8 +61,3 @@ public class MainTerca {
         repositorio.removerPorId(3L);
         repositorio.listarTodas();
         */
-
-    }
-}
-
-
