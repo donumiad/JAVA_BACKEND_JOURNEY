@@ -58,11 +58,12 @@ public class Task {
     @Override
     public String toString() {
         return "Tarefa{" +
-                "id=" + id +
+                " id=" + id +
                 ", titulo='" + titulo + '\'' +
                 ", descricao='" + descricao + '\'' +
                 ", status=" + status +
                 ", prioridade=" + prioridade +
+                ", vencimento=" + dataLimite +
                 '}';
     }
 }

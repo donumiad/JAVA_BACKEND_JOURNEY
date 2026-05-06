@@ -12,10 +12,8 @@ public class TaskRepositoryMemoria {
         tarefas.add(task);
     }
 
-    public void listarTodas(){
-        for (Task listaTarefa: tarefas) {
-            System.out.println(listaTarefa);
-        }
+    public List<Task> listarTodas(){
+        return tarefas;
     }
 
     public Task buscaPorId(Long id){
