@@ -35,7 +35,7 @@ public class Main {
 
         Task tarefa1 = new Task(
                 1L,
-                "Trabalhar List",
+                "Aprender List",
                 "Aprender listas",
                 Status.PENDENTE,
                 Prioridade.ALTA,
@@ -63,7 +63,7 @@ public class Main {
                 LocalDate.of(2026,4,25));
         Task tarefa5 =new Task(
                 5L,
-                "Analisar toString",
+                "Analisar toString para Aprender",
                 "Melhorar impressão de objetos",
                 Status.PENDENTE,
                 Prioridade.BAIXA,
@@ -75,23 +75,74 @@ public class Main {
         repositorio.adicionar(tarefa4);
         repositorio.adicionar(tarefa5);
 
-        System.out.println("");
-        System.out.println("PRIORIDADE ALTA");
-        for (Task task : service.listarPorPrioridade(Prioridade.URGENTE)) {
-            System.out.println(task);
+        Map<Status, Long> contePorStatus = service.contePorStatus();
+        Map<Prioridade, Long> contePorPrioridade = service.contePorPrioridade();
+
+        System.out.println("Pendentes: " + contePorStatus.getOrDefault(Status.PENDENTE, 0L));
+        System.out.println("Concluídas: " + contePorStatus.getOrDefault(Status.CONCLUIDO, 0L));
+
+        System.out.println("Alta: " + contePorPrioridade.getOrDefault(Prioridade.ALTA, 0L));
+        System.out.println("Média: " + contePorPrioridade.getOrDefault(Prioridade.MEDIA, 0L));
+        System.out.println("Baixa: " + contePorPrioridade.getOrDefault(Prioridade.BAIXA, 0L));
+/*
+        imprimirLista("BUSCAR PALAVRA DENTRO DO TITULO",service.tarefaComPalavraDentroDoTitulo("Aprender"));
+
+
+        imprimirLista("LISTAR TITULOS",service.listarTitulos());
+        imprimirLista("LISTAR DESCRIÇÃO",service.listarDescricoes());
+        imprimirLista("LISTAR TITULOS EM CAIXA ALTA",service.listarTitulosEmCaixaAlta());
+        imprimirLista("LISTAR RESUMO FORMATADO",service.listarResumosFormatados());
+*/
+
+        Map<Status, List<Task>> agrupadoPorStatus = service.tarefasPorStatus();
+
+        for (Map.Entry<Status, List<Task>> entrada: agrupadoPorStatus.entrySet()){
+            System.out.println("Status: " + entrada.getKey());
+            for (Task task: entrada.getValue()){
+                System.out.println(task);
+            }
         }
-        System.out.println("");
-        System.out.println("TAREFAS CONCLUIDAS");
-        for (Task task : service.listarPorStatus(Status.ATRAZADO)) {
-            System.out.println(task);
+
+        System.out.println();
+
+        for (Map.Entry<Status, Long> entrada: contePorStatus.entrySet()){
+            System.out.println("Status: " + entrada.getKey() + " - " + entrada.getValue());
         }
-        System.out.println("");
-        System.out.println("VENCIDAS");
-        for (Task task : service.listarVencidas()) {
-            System.out.println(task);
+
+        System.out.println();
+        Map<Prioridade, List<Task>> agrupadoPorPrioridade = service.tarefasPorPrioridade();
+
+        for (Map.Entry<Prioridade, List<Task>> entrada: agrupadoPorPrioridade.entrySet()){
+            System.out.println("Prioridade: " + entrada.getKey());
+            for (Task task: entrada.getValue()){
+                System.out.println(task);
+            }
+        }
+
+        System.out.println();
+
+        for (Map.Entry<Prioridade, Long> entrada: contePorPrioridade.entrySet()){
+            System.out.println("Prioridade: " + entrada.getKey() + " - " + entrada.getValue());
+        }
+
+
+
+    }
+
+    public static <T> void imprimirLista(String titulo, List<T> lista){
+        System.out.println();
+        System.out.println(titulo);
+
+        for (T item: lista){
+            System.out.println(item);
         }
     }
+
+
+
 }
+
+
 
 /*
 
