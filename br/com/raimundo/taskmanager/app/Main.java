@@ -1,6 +1,7 @@
 package br.com.raimundo.taskmanager.app;
 
 import br.com.raimundo.taskmanager.comparator.TaskPorDataComparator;
+import br.com.raimundo.taskmanager.comparator.TaskPorIdComparator;
 import br.com.raimundo.taskmanager.comparator.TaskPorPrioridadeComparator;
 import br.com.raimundo.taskmanager.comparator.TaskPorTituloComparator;
 import br.com.raimundo.taskmanager.exception.DuplicateTaskException;
@@ -15,6 +16,7 @@ import br.com.raimundo.taskmanager.testes.Produto;
 import br.com.raimundo.taskmanager.testes.SetProduto;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 /*LIST
@@ -37,6 +39,192 @@ public class Main {
         TaskService service = new TaskService(repositorio);
 
         Task tarefa1 = new Task(
+                1L,
+                "Aprender List",
+                "Aprender listas",
+                Status.PENDENTE,
+                Prioridade.ALTA,
+                LocalDate.of(2026,5,8));
+
+        Task tarefa2 = new Task(
+                2L,
+                "Preparar Set",
+                "Aprender conjuntos",
+                Status.EM_ANDAMENTO,
+                Prioridade.MEDIA,
+                LocalDate.of(2026,5,6));
+        Task tarefa3 = new Task(3L,
+                "Estudar Map",
+                "Aprender mapeamentos",
+                Status.PENDENTE,
+                Prioridade.BAIXA,
+                LocalDate.of(2026,4,30));
+        Task tarefa4 = new Task(
+                4L,
+                "Criar enum",
+                "Treinar Status e Prioridade",
+                Status.CONCLUIDO,
+                Prioridade.MINIMA,
+                LocalDate.of(2026,4,25));
+        Task tarefa5 =new Task(
+                5L,
+                "Analisar toString para Aprender",
+                "Melhorar impressão de objetos",
+                Status.PENDENTE,
+                Prioridade.BAIXA,
+                LocalDate.of(2026,5,10));
+
+        service.cadastrar(tarefa1);
+        service.cadastrar(tarefa2);
+        service.cadastrar(tarefa3);
+        service.cadastrar(tarefa4);
+        service.cadastrar(tarefa5);
+
+        Scanner scanner = new Scanner(System.in);
+
+        String opcao = "-1";
+        while (!opcao.equals("0")) {
+            exibirMenu();
+            System.out.println("Digite a opção: ");
+            opcao = scanner.nextLine();
+
+            switch (opcao) {
+                case "1": // cadastrar
+                    Long proximoId = repositorio.listarTodas()
+                            .stream()
+                            .map(Task::getId)
+                            .max(Long::compareTo)
+                            .orElse(0L) + 1;
+
+                    try {
+
+                        System.out.println("Digite o título: ");
+                        String titulo = scanner.nextLine();
+                        System.out.println("Digite a descrição: ");
+                        String descricao = scanner.nextLine();
+                        System.out.println("Digite o status: ");
+                        String status = scanner.nextLine();
+                        System.out.println("Digite a prioridade: ");
+                        String prioridade = scanner.nextLine();
+                        System.out.println("Digite a data de conclusão (yyyy-MM-dd): ");
+                        String data = scanner.nextLine();
+                        LocalDate dataLimite = LocalDate.parse(data);
+
+                        Task novaTask =
+                                new Task(proximoId, titulo, descricao,
+                                        converterTextoParaStatus(status),
+                                        converterTextoParaPrioridade(prioridade),
+                                        dataLimite);
+
+                        service.cadastrar(novaTask);
+                        System.out.println("Tarefa cadastrada com sucesso.");
+
+                    } catch (InvalidTaskDataException | DuplicateTaskException e) {
+                        System.out.println(e.getMessage());
+                    } catch (DateTimeParseException e) {
+                        System.out.println("Data inválida. Use o formato yyyy-MM-dd.");
+                    }
+                    break;
+
+                case "2": //Imprimir todas as tarefas
+                    imprimirLista("TAREFAS CADASTRADAS", repositorio.listarTodas());
+                    break;
+
+                case "3": // filtrar por status
+                    System.out.println("Digite o status das tarefas que quer ver: ");
+                    String textoStatus = scanner.nextLine();
+
+                    try{
+                        Status statusConvertido = converterTextoParaStatus(textoStatus);
+                        imprimirLista("Tarefas filtradas:", service.filtrarPorStatus(statusConvertido));
+                    } catch (InvalidTaskDataException | TaskNotFoundException e){
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+
+                case "4": // filtrar por prioridade
+                    System.out.println("Digite a prioridade das tarefas que quer ver: ");
+                    String textoPrioridade = scanner.nextLine();
+                    Prioridade prioridadeConvertido = converterTextoParaPrioridade(textoPrioridade);
+                    imprimirLista("Tarefas filtradas:", service.filtrarPorPrioridade(prioridadeConvertido));
+                    break;
+
+                case "5": //Buscar por ID
+                    System.out.println("Digite o ID");
+                    Long id = scanner.nextLong();
+                    scanner.nextLine();
+                    service.buscarUnicaPorId(id)
+                            .ifPresentOrElse(System.out::println,
+                                    ()-> System.out.println("Tarefa não encontrada"));
+                    break;
+                case "6":
+                    imprimirLista("TASK ORGANIZADAS POR DATA", service.listarPorDataOrdenada());
+                    break;
+                case "0":
+                    System.out.println("Saindo...");
+                    break;
+                default:
+                    System.out.println("Opção inválida.");
+            }
+        }
+
+    }
+
+    public static void exibirMenu(){
+        System.out.println("BEM VINDO. ESCOLHA UMA OPÇÃO");
+        System.out.println("1 - Cadastrar nova tarefa");
+        System.out.println("2 - Listar todas as tarefas");
+        System.out.println("3 - Filtrar por Status");
+        System.out.println("4 - Filtrar po prioridade");
+        System.out.println("5 - Buscar por ID");
+        System.out.println("6 - Ordenar por data");
+        System.out.println("0 - SAIR");
+        System.out.println();
+    }
+
+    public static <T> void imprimirLista(String titulo, List<T> lista){
+        System.out.println();
+        System.out.println(titulo);
+
+        for (T item: lista){
+            System.out.println(item);
+        }
+    }
+
+    public static Status converterTextoParaStatus(String texto) {
+        String status = texto.trim().toLowerCase();
+
+        return switch (status) {
+            case "concluido" -> Status.CONCLUIDO;
+            case "em andamento" -> Status.EM_ANDAMENTO;
+            case "atrasado" -> Status.ATRAZADO;
+            case "pendente" -> Status.PENDENTE;
+            case "naoiniciado" -> Status.NAO_INICIADO;
+            default -> throw new InvalidTaskDataException("Status inválido.");
+        };
+    }
+
+    public static Prioridade converterTextoParaPrioridade(String texto) {
+        String prioridade = texto.trim().toLowerCase();
+
+        switch (prioridade) {
+            case "urgente":
+                return Prioridade.URGENTE;
+            case "alta":
+                return Prioridade.ALTA;
+            case "media":
+                return Prioridade.MEDIA;
+            case "baixa":
+                return Prioridade.BAIXA;
+            case "minima":
+                return Prioridade.MINIMA;
+            default:
+                throw new InvalidTaskDataException("Prioridade inválida.");
+        }
+    }
+}
+
+ /* Task tarefa1 = new Task(
                 1L,
                 "Aprender List",
                 "Aprender listas",
@@ -224,11 +412,11 @@ public class Main {
 
         Task tarefa25 = new Task(
                 25L,
-                "Preparar menu console",
+                "Um titulo qualquer",
                 "Planejar opções do sistema para a próxima etapa",
                 Status.PENDENTE,
                 Prioridade.MEDIA,
-                LocalDate.of(2026, 5, 21));
+                null);
 
         try {
             service.cadastrar(tarefa1);
@@ -255,40 +443,27 @@ public class Main {
             service.cadastrar(tarefa22);
             service.cadastrar(tarefa23);
             service.cadastrar(tarefa24);
-            service.cadastrar(tarefa25);
+            //service.cadastrar(tarefa25);
             System.out.println("Tarefa cadastrada com sucesso.");
         } catch (InvalidTaskDataException | DuplicateTaskException e) {
             System.out.println("Erro ao cadastrar tarefa: " + e.getMessage());
         }
 
+        System.out.println();
 
         try {
-            service.cadastrar(tarefa1);
+            service.cadastrar(tarefa25);
         } catch (InvalidTaskDataException | DuplicateTaskException e) {
-            System.out.println("Erro ao cadastrar tarefa: " + e.getMessage());
-         }
+            System.out.println(e.getMessage());
+        }
+
+        System.out.println();
 
         try {
             service.buscarObrigatoriaPorId(26L);
         } catch (TaskNotFoundException e) {
             System.out.println("Erro: " + e.getMessage());
-        }
-
-
-    }
-
-    public static <T> void imprimirLista(String titulo, List<T> lista){
-        System.out.println();
-        System.out.println(titulo);
-
-        for (T item: lista){
-            System.out.println(item);
-        }
-    }
-
-
-
-}
+        }*/
 
 /*
         System.out.println("RELATÓRIO");
@@ -430,7 +605,7 @@ public class Main {
         System.out.println("");*/
 
 /*
-USO DO COMPARATOR
+*************************USO DO COMPARATOR***********************
 *System.out.println("ANTES DA ORDENACAO");
         for (Task listaTask: tarefas) {
             System.out.println(listaTask);
@@ -457,7 +632,7 @@ USO DO COMPARATOR
         nomes.add("João");
 
         System.out.println(nomes);
-
+************************************************************
 //-------------List Codigo-----------------
         System.out.println("LIST CODIGO");
         List<Produto> produtos = new ArrayList<>();

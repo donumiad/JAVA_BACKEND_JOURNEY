@@ -90,10 +90,17 @@ public class TaskService {
     //***********METODOS QUE TRABALHAM COM STATUS******************************
 
     public List<Task> filtrarPorStatus(Status status) {
-        return repositorio.listarTodas()
+
+        List<Task> listaComStatus =  repositorio.listarTodas()
                 .stream()
                 .filter(task -> task.getStatus() == status)
                 .toList();
+        if (listaComStatus.isEmpty()){
+            throw new TaskNotFoundException("Não há tarefas com esse status.");
+        }
+
+        return listaComStatus;
+
     }
 
     //Visão geral das tarefas por STATUS
@@ -172,15 +179,19 @@ public class TaskService {
     public List<Task> listarPorDataOrdenada() {
         return repositorio.listarTodas()
                 .stream()
-                .sorted(new TaskPorDataComparator())
+                .sorted(Comparator.comparing(Task::getDataLimite))
                 .toList();
     }
 
     //****************************************************************************
     //****************************METODOS ACESSÓRIOS******************************
 
+    public void cadastrar(Task task){
+        validarTask(task);
+        repositorio.adicionar(task);
+    }
 
-    public void cadastrar(Task task) {
+    private void validarTask(Task task) {
         if (task == null) {
             throw new InvalidTaskDataException("A tarefa não pode ser nula.");
         }
@@ -197,7 +208,9 @@ public class TaskService {
             throw new DuplicateTaskException("Já existe uma tarefa com id: " + task.getId());
         }
 
-        repositorio.adicionar(task);
+        if (task.getDataLimite() == null){
+            throw new InvalidTaskDataException("A data: (" + task.getDataLimite() +") da task ("+ task.getId() +") é invalida");
+        }
     }
 
     public List<String> listarResumosFormatados() {
