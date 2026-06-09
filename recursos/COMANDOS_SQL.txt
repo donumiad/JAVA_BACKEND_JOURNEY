@@ -1,0 +1,98 @@
+
+1. CREATE TABLE (Criação de Tabelas)
+Criação Básica com Chave Primária:
+
+CREATE TABLE "tabela" ( 
+"coluna1" "TIPO_DE_DADO" PRIMARY KEY CONSTRANTS,
+ "coluna2" "TIPO_DE_DADO" CONSTRANTS );
+
+(Define a estrutura da tabela e qual coluna será o identificador único).
+
+Criação com Auto-Incremento e Restrição Não Nula:
+CREATE TABLE "tabela" ( "id" SERIAL PRIMARY KEY, 
+"coluna" "TIPO_DE_DADO" NOT NULL );
+***(O SERIAL ou AUTO_INCREMENT faz o ID crescer sozinho. NOT NULL obriga o preenchimento do campo).
+
+Criação com Chave Estrangeira (Relacionamento):
+CREATE TABLE "tabela_filho" ( 
+"id" INT PRIMARY KEY, 
+"tabela_pai_id" INT, 
+FOREIGN KEY ("tabela_pai_id") REFERENCES "tabela_pai"("id") );
+***(Cria um vínculo entre duas tabelas, garantindo a integridade dos dados).
+
+2. INSERT (Inserção de Dados)
+Inserção Padrão (Especificando Colunas):
+INSERT INTO "tabela" ("coluna1", "coluna2") VALUES ("valor1", "valor2");
+***(A forma mais segura, mapeando diretamente qual valor vai para qual coluna).
+
+Inserção Simplificada (Todas as Colunas):
+INSERT INTO "tabela" VALUES ("valor1", "valor2", "valor3");
+***(Funciona apenas se você passar os valores exatamente na mesma ordem em que as colunas foram criadas na tabela).
+
+Inserção Múltipla (Vários registros de uma vez):
+INSERT INTO "tabela" ("coluna1", "coluna2") VALUES ("valorA1", "valorA2"), ("valorB1", "valorB2");
+***(Insere várias linhas de dados com um único comando, otimizando a performance).
+
+3. SELECT (Consulta de Dados)
+Seleção de Todas as Colunas:
+SELECT * FROM "tabela";
+***(O asterisco * serve para trazer absolutamente todas as colunas existentes na tabela).
+
+Seleção com Apelido (Alias):
+SELECT "coluna" AS "nome_bonito" FROM "tabela";
+***(Muda temporariamente o nome de exibição do cabeçalho da coluna no resultado da busca).
+
+Seleção Sem Duplicações:
+SELECT DISTINCT "coluna" FROM "tabela";
+***(Remove valores repetidos do resultado, mostrando apenas os registros únicos).
+
+Seleção Ordenada:
+SELECT "colunas" FROM "tabela" ORDER BY "coluna_referencia" ASC/DESC;
+***(Ordena os resultados. ASC para crescente/alfabética e DESC para decrescente).
+
+Seleção Limitada (Paginação):
+SELECT "colunas" FROM "tabela" LIMIT "quantidade";
+***(Limita o número de linhas retornadas. Ex: LIMIT 10 traz apenas as 10 primeiras linhas).
+
+4. WHERE (Filtragem e Condicional)
+O WHERE não funciona sozinho; ele complementa comandos como SELECT, UPDATE ou DELETE. Aqui estão suas variações de condições:
+
+Condição de Igualdade / Diferença:
+SELECT "colunas" FROM "tabela" WHERE "coluna" = "valor";
+SELECT "colunas" FROM "tabela" WHERE "coluna" <> "valor"; (ou != para diferente)
+
+Condição de Maior / Menor / Intervalo:
+SELECT "colunas" FROM "tabela" WHERE "coluna" >= "valor";
+SELECT "colunas" FROM "tabela" WHERE "coluna" BETWEEN "valor_inicial" AND "valor_final";
+
+Condições Múltiplas (E / OU):
+SELECT "colunas" FROM "tabela" WHERE "condicao1" AND "condicao2"; (As duas precisam ser verdadeiras)
+SELECT "colunas" FROM "tabela" WHERE "condicao1" OR "condicao2"; (Pelo menos uma precisa ser verdadeira)
+
+Filtro por Lista de Opções:
+SELECT "colunas" FROM "tabela" WHERE "coluna" IN ("opcao1", "opcao2", "opcao3");
+(Substitui múltiplos OR. Filtra se o valor estiver dentro da lista informada).
+
+Busca por Parte de um Texto (Pattern Matching):
+SELECT "colunas" FROM "tabela" WHERE "coluna" LIKE "texto%";
+(O % é um caractere curinga. LIKE 'A%' acha quem começa com A. LIKE '%A' acha quem termina com A. LIKE '%A%' acha quem tem A em qualquer lugar).
+
+Filtro de Valores Nulos (Vazios):
+SELECT "colunas" FROM "tabela" WHERE "coluna" IS NULL;
+SELECT "colunas" FROM "tabela" WHERE "coluna" IS NOT NULL;
+(Verifica se o campo foi deixado em branco ou se ele obrigatoriamente contém algum dado).
+
+ATUALIZAR DADOS
+UPDATE tabela
+SET coluna1 = valor1,
+    coluna2 = valor2
+WHERE condição AND condição2;
+
+EXEMPLO 
+UPDATE produtos
+SET preco = 300.00
+WHERE id = 1;
+
+DELETAR REGISTROS
+DELETE FROM nome_da_tabela
+WHERE condicao;
