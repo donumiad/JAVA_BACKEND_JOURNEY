@@ -1,49 +1,51 @@
 package br.com.raimundo.loja.model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class Pedido {
     private Long id;
-    private String descricao;
+    private LocalDate dataPedido;
     private Cliente cliente;
-    //private Produto produto;
-    private List<Produto> produtos = new ArrayList<>();
 
-    public Pedido(Long id, String descricao, Cliente cliente) {
+    public Pedido(Long id,LocalDate dataPedido, Cliente cliente) {
         this.id = id;
-        this.descricao = descricao;
+        this.dataPedido = dataPedido;
         this.cliente = cliente;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setDataPedido(LocalDate dataPedido) {
+        this.dataPedido = dataPedido;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public LocalDate getDataPedido() {
+        return dataPedido;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
     }
 
     public Long getId() {
         return id;
     }
 
-    public List<Produto> getProdutos() {
-        return produtos;
-    }
-
-    public void setProdutos(List<Produto> produtos) {
-        this.produtos = produtos;
-    }
-
     @Override
     public String toString() {
         return "Pedido{" +
-                "id=" + id +
-                ", descricao='" + descricao + '\'' +
+                "id=" + id  +
                 ", cliente=" + cliente.getNome() +
-                ", produtos=" + produtos +
+                ", data do pedido=" + dataPedido +
                 '}';
     }
 

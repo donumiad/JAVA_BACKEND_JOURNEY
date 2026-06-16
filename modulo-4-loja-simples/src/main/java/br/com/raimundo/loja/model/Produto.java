@@ -1,14 +1,15 @@
 package br.com.raimundo.loja.model;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Produto {
     private Long id;
     private Integer estoque;
-    private float preco;
+    private BigDecimal preco;
     private String nome;
 
-    public Produto(Long id, String nome, float preco, Integer estoque) {
+    public Produto(Long id, String nome, BigDecimal preco, Integer estoque) {
         this.id = id;
         this.nome = nome;
         this.preco = preco;
@@ -39,11 +40,11 @@ public class Produto {
         this.nome = nome;
     }
 
-    public float getPreco() {
+    public BigDecimal getPreco() {
         return preco;
     }
 
-    public void setPreco(float preco) {
+    public void setPreco(BigDecimal preco) {
         this.preco = preco;
     }
 
