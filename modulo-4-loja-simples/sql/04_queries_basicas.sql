@@ -1,16 +1,16 @@
-SELECT * FROM cliente;
+SELECT * FROM clientes;
 
-SELECT * FROM produto;
+SELECT * FROM produtos;
 
-SELECT * FROM pedido;
+SELECT * FROM pedidos;
 
 SELECT * FROM itens_pedidos;
 
 SELECT id, nome, email
-FROM cliente
+FROM clientes
 ORDER BY nome;
 
 SELECT id, nome, preco, estoque
-FROM produto
+FROM produtos
 WHERE estoque < 10
 ORDER BY estoque;
