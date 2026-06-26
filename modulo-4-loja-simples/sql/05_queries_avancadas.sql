@@ -3,8 +3,8 @@ SELECT
     p.id AS pedido_id,
     c.nome AS cliente,
     p.data_pedido
-FROM pedido p
-         JOIN cliente c ON p.cliente_id = c.id
+FROM pedidos p
+         JOIN clientes c ON p.cliente_id = c.id
 ORDER BY p.id;
 
 
@@ -14,9 +14,9 @@ SELECT
     ip.pedido_id,
     pr.nome AS produto,
     ip.quantidade,
-    ip.valor_unit
+    ip.preco_unitario
 FROM itens_pedidos ip
-         JOIN produto pr ON ip.produto_id = pr.id
+JOIN produtos pr ON ip.produto_id = pr.id
 ORDER BY ip.pedido_id;
 
 
@@ -27,12 +27,12 @@ SELECT
     p.data_pedido,
     pr.nome AS produto,
     ip.quantidade,
-    ip.valor_unit,
-    ip.quantidade * ip.valor_unit AS subtotal
-FROM pedido p
-         JOIN cliente c ON p.cliente_id = c.id
+    ip.preco_unitario,
+    ip.quantidade * ip.preco_unitario AS subtotal
+FROM pedidos p
+         JOIN clientes c ON p.cliente_id = c.id
          JOIN itens_pedidos ip ON ip.pedido_id = p.id
-         JOIN produto pr ON ip.produto_id = pr.id
+         JOIN produtos pr ON ip.produto_id = pr.id
 ORDER BY p.id;
 
 
@@ -41,9 +41,9 @@ SELECT
     p.id AS pedido_id,
     c.nome AS cliente,
     p.data_pedido,
-    SUM(ip.quantidade * ip.valor_unit) AS total_pedido
-FROM pedido p
-         JOIN cliente c ON p.cliente_id = c.id
+    SUM(ip.quantidade * ip.preco_unitario) AS total_pedido
+FROM pedidos p
+         JOIN clientes c ON p.cliente_id = c.id
          JOIN itens_pedidos ip ON ip.pedido_id = p.id
 GROUP BY p.id, c.nome, p.data_pedido
 ORDER BY p.id;
@@ -53,9 +53,9 @@ ORDER BY p.id;
 SELECT
     c.id AS cliente_id,
     c.nome AS cliente,
-    SUM(ip.quantidade * ip.valor_unit) AS total_gasto
-FROM cliente c
-         JOIN pedido p ON p.cliente_id = c.id
+    SUM(ip.quantidade * ip.preco_unitario) AS total_gasto
+FROM clientes c
+         JOIN pedidos p ON p.cliente_id = c.id
          JOIN itens_pedidos ip ON ip.pedido_id = p.id
 GROUP BY c.id, c.nome
 ORDER BY total_gasto DESC;
@@ -66,7 +66,7 @@ SELECT
     pr.id AS produto_id,
     pr.nome AS produto,
     SUM(ip.quantidade) AS total_vendido
-FROM produto pr
+FROM produtos pr
          JOIN itens_pedidos ip ON ip.produto_id = pr.id
 GROUP BY pr.id, pr.nome
 ORDER BY total_vendido DESC;
