@@ -4,17 +4,32 @@ import br.com.raimundo.estoque.connection.ConnectionFactory;
 import br.com.raimundo.estoque.dao.ProdutoDaoJdbc;
 import br.com.raimundo.estoque.model.Produto;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 public class Main {
     public static void main(String[] args) {
-        ProdutoDaoJdbc teste = new ProdutoDaoJdbc();
-        for (Produto produto: teste.listarTodos()) {
+
+        ProdutoDaoJdbc ProdutoDaoTeste = new ProdutoDaoJdbc();
+
+//        Produto produtoTeste = new Produto(
+//                "Produto teste",
+//                new BigDecimal("120.00"),
+//                20
+//        );
+//        ProdutoDaoTeste.salvar(produtoTeste);
+
+//        COMANDO PARA LISTAR TODOS OS PRODUTOS DA TABELA produtos
+        //ProdutoDaoJdbc listarProdutos = new ProdutoDaoJdbc();
+        for (Produto produto: ProdutoDaoTeste.listarTodos()) {
             System.out.println(produto);
         }
 
-
+        System.out.println();
+        System.out.println(ProdutoDaoTeste.buscarPorNome("mouse"));
+        System.out.println();
+        System.out.println(ProdutoDaoTeste.buscarPorId(1L));
 
     }
 }
