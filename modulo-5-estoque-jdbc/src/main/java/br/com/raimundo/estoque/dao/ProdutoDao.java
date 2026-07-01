@@ -15,4 +15,10 @@ public interface ProdutoDao {
 
     List<Produto> buscarPorNome(String trecho);
 
+    void atualizarEstoque(Long id, Integer novaEstoque);
+
+    void atualizar(Produto produto);
+
+
+
 }

@@ -62,6 +62,7 @@ public class ProdutoDaoJdbc implements ProdutoDao{
                 PreparedStatement statement = connection.prepareStatement(sql)
         ) {
             statement.setLong(1, id);
+
             try (ResultSet resultSet = statement.executeQuery()){
                 if (resultSet.next()){
                     Produto produto = mapearProduto(resultSet);
@@ -129,6 +130,62 @@ public class ProdutoDaoJdbc implements ProdutoDao{
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao salvar produto", e);
+        }
+    }
+
+    @Override
+    public void atualizarEstoque(Long id, Integer novoEstoque) {
+        String sql = """
+                UPDATE produtos
+                SET estoque = ?
+                WHERE id = ?
+                """;
+
+        try (
+                Connection connection = ConnectionFactory.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql);
+                ){
+            statement.setInt(1, novoEstoque);
+            statement.setLong(2, id);
+
+            int linhasAfetadas = statement.executeUpdate();
+
+            if (linhasAfetadas == 0){
+                throw new RuntimeException("Produto não encontrado para o id: " + id);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao localizar estoque do produto",e);
+        }
+    }
+
+    @Override
+    public void atualizar(Produto produto) {
+
+        String sql = """
+                UPDATE produtos
+                SET
+                    nome = ?,
+                    preco = ?,
+                    estoque = ?
+                WHERE id = ?
+                """;
+        try (
+                Connection connection = ConnectionFactory.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql);
+                ){
+
+            statement.setString(1, produto.getNome());
+            statement.setBigDecimal(2, produto.getPreco());
+            statement.setInt(3, produto.getEstoque());
+            statement.setLong(4, produto.getId());
+
+            int linhasAfetadas = statement.executeUpdate();
+
+            if (linhasAfetadas == 0){
+                throw new RuntimeException("Produto não encontrado para o id: " + produto.getId());
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao atualizar produto",e);
         }
     }
 
