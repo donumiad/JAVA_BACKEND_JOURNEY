@@ -9,7 +9,7 @@ public class ConnectionFactory {
     private static final String USER = "postgres";
     private static final String PASSWORD = "rdo#9494RDO";
 
-    //Método para abrir conexão com o banco
+    //Metodo para abrir conexão com o banco
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }

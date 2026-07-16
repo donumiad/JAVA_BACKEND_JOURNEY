@@ -17,18 +17,14 @@ import java.util.Optional;
 
 public class ProdutoDaoJdbc implements ProdutoDao{
 
+    private static final String COLUNAS_SELECT =
+            "id, nome, preco, estoque";
+
 @Override
     public List<Produto> listarTodos(){
         List<Produto> produtos = new ArrayList<>();
-        String sql = """
-                SELECT
-                    id,
-                    nome,
-                    preco,
-                    estoque
-                FROM produtos
-                ORDER BY id
-                """;
+        String sql = "SELECT " +COLUNAS_SELECT+ " FROM produtos ORDER BY id";
+
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()
@@ -47,15 +43,7 @@ public class ProdutoDaoJdbc implements ProdutoDao{
     @Override
     public Optional<Produto> buscarPorId(Long id) {
 
-        String sql = """
-                SELECT
-                    id,
-                    nome,
-                    preco,
-                    estoque
-                FROM produtos
-                WHERE id = ?
-                """;
+        String sql = "SELECT " + COLUNAS_SELECT + " FROM produtos WHERE id = ?";
 
         try (
                 Connection connection = ConnectionFactory.getConnection();
@@ -72,7 +60,7 @@ public class ProdutoDaoJdbc implements ProdutoDao{
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar produto: ", e);
+            throw new RuntimeException("Erro ao buscar id do produto: ", e);
         }
 
     }
@@ -81,16 +69,9 @@ public class ProdutoDaoJdbc implements ProdutoDao{
     public List<Produto> buscarPorNome(String trecho) {
 
         List<Produto> produtos = new ArrayList<>();
-        String sql = """
-                SELECT
-                    id,
-                    nome,
-                    preco,
-                    estoque
-                FROM produtos
-                WHERE nome ILIKE ?
-                ORDER BY nome
-                """;
+
+        String sql = "SELECT " + COLUNAS_SELECT + " FROM produtos WHERE nome ILIKE ? ORDER BY nome";
+
         try (
                 Connection connection = ConnectionFactory.getConnection();
                 PreparedStatement statement = connection.prepareStatement(sql);
@@ -106,7 +87,7 @@ public class ProdutoDaoJdbc implements ProdutoDao{
             return produtos;
 
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar produto: ",e);
+            throw new RuntimeException("Erro ao buscar produto com ("+ trecho + "): ",e);
         }
     }
 
@@ -115,7 +96,6 @@ public class ProdutoDaoJdbc implements ProdutoDao{
         String sql = """
             INSERT INTO produtos (nome, preco, estoque)
             VALUES (?, ?, ?)
-            ON CONFLICT (nome) DO NOTHING 
             """;
 
         try (
@@ -137,7 +117,7 @@ public class ProdutoDaoJdbc implements ProdutoDao{
     public void atualizarEstoque(Long id, Integer novoEstoque) {
         String sql = """
                 UPDATE produtos
-                SET estoque = ?
+                SET estoque = estoque + ?
                 WHERE id = ?
                 """;
 
@@ -152,6 +132,8 @@ public class ProdutoDaoJdbc implements ProdutoDao{
 
             if (linhasAfetadas == 0){
                 throw new RuntimeException("Produto não encontrado para o id: " + id);
+            }else {
+                System.out.println("Estoque atualizado com sucesso no id: " + id);
             }
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao localizar estoque do produto",e);
@@ -189,6 +171,32 @@ public class ProdutoDaoJdbc implements ProdutoDao{
         }
     }
 
+    @Override
+    public void removerPorId(Long id) {
+
+        String sql = """
+                DELETE FROM produtos
+                WHERE id = ?
+                """;
+        try (
+                Connection connection = ConnectionFactory.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql);
+                ){
+            statement.setLong(1, id);
+
+            int linhasAfetadas = statement.executeUpdate();
+
+            if (linhasAfetadas == 0){
+                throw new RuntimeException("Nenhum produto removido. Id não encontrado: " + id);
+            }else {
+                System.out.println("O produto com ID: "+ id +" foi removido com sucesso");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao remover produto", e);
+        }
+    }
+
     private Produto mapearProduto(ResultSet resultSet) throws SQLException {
         Produto produto = new Produto();
 
@@ -200,5 +208,23 @@ public class ProdutoDaoJdbc implements ProdutoDao{
         return produto;
     }
 
+    @Override
+    public boolean incrementarEstoque(Connection connection, Long idProduto, Integer quantidade) throws SQLException {
+        String sql = """
+            UPDATE produtos
+            SET estoque = estoque + ?
+            WHERE id = ?
+            """;
 
+        try (PreparedStatement statement =
+                     connection.prepareStatement(sql)) {
+
+            statement.setInt(1, quantidade);
+            statement.setLong(2, idProduto);
+
+            int linhasAfetadas = statement.executeUpdate();
+
+            return linhasAfetadas == 1;
+        }
+    }
 }

@@ -40,3 +40,21 @@ CREATE TABLE itens_pedidos (
                REFERENCES produtos(id)
 
 );
+
+CREATE TABLE movimentacoes_estoque (
+       id BIGSERIAL PRIMARY KEY,
+       produto_id BIGINT NOT NULL,
+       tipo VARCHAR(20) NOT NULL CHECK ( tipo IN ('ENTRADA', 'SAIDA') ),
+       quantidade INTEGER NOT NULL,
+       data_movimentacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+       CONSTRAINT fk_movimentacoes_produtos
+           FOREIGN KEY (produto_id)
+               REFERENCES produtos(id),
+
+       CONSTRAINT chk_tipo_movimentacao
+           CHECK (tipo IN ('ENTRADA', 'SAIDA')),
+
+       CONSTRAINT chk_quantidade_movimentacao
+           CHECK (quantidade > 0)
+);
