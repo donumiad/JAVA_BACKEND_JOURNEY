@@ -1,12 +1,11 @@
 package br.com.raimundo.estoque.dao;
 
 import br.com.raimundo.estoque.connection.ConnectionFactory;
+import br.com.raimundo.estoque.exceptions.DataAccessException;
+import br.com.raimundo.estoque.exceptions.ProdutoNaoEncontradoException;
 import br.com.raimundo.estoque.model.Produto;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,8 +32,9 @@ public class ProdutoDaoJdbc implements ProdutoDao{
                 Produto produto = mapearProduto(resultSet);
                 produtos.add(produto);
             }
+
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao listar produtos: ", e);
+            throw new DataAccessException("Erro ao listar produtos: ", e);
         }
 
         return produtos;
@@ -87,12 +87,12 @@ public class ProdutoDaoJdbc implements ProdutoDao{
             return produtos;
 
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar produto com ("+ trecho + "): ",e);
+            throw new DataAccessException("Erro ao buscar produto com ("+ trecho + "): ",e);
         }
     }
 
     @Override
-    public void salvar(Produto produto) {
+    public Produto salvar(Produto produto) {
         String sql = """
             INSERT INTO produtos (nome, preco, estoque)
             VALUES (?, ?, ?)
@@ -100,13 +100,21 @@ public class ProdutoDaoJdbc implements ProdutoDao{
 
         try (
                 Connection connection = ConnectionFactory.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql)
+                PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
         ) {
             statement.setString(1, produto.getNome());
             statement.setBigDecimal(2, produto.getPreco());
             statement.setInt(3, produto.getEstoque());
 
             statement.executeUpdate();
+
+            try (ResultSet chaves = statement.getGeneratedKeys()) {
+                if (chaves.next()) {
+                    produto.setId(chaves.getLong(1));
+                }
+            }
+
+            return produto;
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao salvar produto", e);
@@ -164,7 +172,7 @@ public class ProdutoDaoJdbc implements ProdutoDao{
             int linhasAfetadas = statement.executeUpdate();
 
             if (linhasAfetadas == 0){
-                throw new RuntimeException("Produto não encontrado para o id: " + produto.getId());
+                throw new ProdutoNaoEncontradoException(produto.getId());
             }
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao atualizar produto",e);
@@ -187,9 +195,7 @@ public class ProdutoDaoJdbc implements ProdutoDao{
             int linhasAfetadas = statement.executeUpdate();
 
             if (linhasAfetadas == 0){
-                throw new RuntimeException("Nenhum produto removido. Id não encontrado: " + id);
-            }else {
-                System.out.println("O produto com ID: "+ id +" foi removido com sucesso");
+                throw new ProdutoNaoEncontradoException(id);
             }
 
         } catch (SQLException e) {

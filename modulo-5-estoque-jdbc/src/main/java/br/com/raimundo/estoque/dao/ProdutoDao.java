@@ -11,7 +11,7 @@ public interface ProdutoDao {
 
     List<Produto> listarTodos();
 
-    void salvar(Produto produto);
+    Produto salvar(Produto produto);
 
     Optional<Produto> buscarPorId(Long id);
 

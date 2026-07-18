@@ -2,6 +2,7 @@ package br.com.raimundo.estoque.app;
 
 import br.com.raimundo.estoque.dao.ProdutoDao;
 import br.com.raimundo.estoque.dao.ProdutoDaoJdbc;
+import br.com.raimundo.estoque.exceptions.DataAccessException;
 import br.com.raimundo.estoque.model.Produto;
 
 import java.math.BigDecimal;
@@ -24,32 +25,28 @@ public class MenuProduto {
 
             switch (opcao) {
                 case 1:
+
+                    String nome = lerTexto("Digite o nome do produto: ");
+                    BigDecimal preco = lerDecimal("Digite o preco do produto: ");
+                    Integer estoque = lerInteiro("Digite estoque do produto: ");
+
+                    Produto produto = new Produto(nome, preco, estoque);
+
                     try {
-                        Produto produtoCadastro = new Produto();
+                        Produto salvo = cadastrarProdutos(produto); // recebe o produto com id
+                        System.out.println("Produto cadastrado com sucesso!");
+                        System.out.println("ID gerado: " + salvo.getId());
+                        System.out.println("Nome: "      + salvo.getNome());
 
-                        System.out.println("Digite o nome do produto: ");
-                        String nome = scanner.nextLine();
-                        System.out.println("Digite o preco do produto: ");
-                        BigDecimal preco = new BigDecimal(scanner.nextLine().replace(",", "."));
-                        System.out.println("Quanto há de estoque do produto: ");
-                        Integer estoque = Integer.parseInt(scanner.nextLine());
-
-                        produtoCadastro.setNome(nome);
-                        produtoCadastro.setPreco(preco);
-                        produtoCadastro.setEstoque(estoque);
-
-                        cadastrarProdutos(produtoCadastro);
-                    } catch (NumberFormatException e){
-                        System.out.println("Valor numérico inválido");
-                    } catch (RuntimeException e){
-                        System.out.println(e.getMessage());
+                    } catch (RuntimeException e) {
+                        System.out.println("Erro ao cadastrar: " + e.getMessage());
                     }
-
-
                     break;
+
                 case 2:
                     listarProdutos();
                     break;
+
                 case 3:
                     System.out.println("Digite o nome do produto buscado: ");
                     String trecho = scanner.nextLine();
@@ -58,8 +55,10 @@ public class MenuProduto {
                 case 4:
                     System.out.println("Digite o id do produto: ");
                     Long id = Long.parseLong(scanner.nextLine());
+
                     System.out.println("Digite o nova quantidade no estoque: ");
                     String texto = scanner.nextLine();
+
                     int quantidadeNoEstoque = Integer.parseInt(texto);
                     atualizarEstoque(id, quantidadeNoEstoque);
                     break;
@@ -87,26 +86,84 @@ public class MenuProduto {
         System.out.println("0 - Sair");
     }
 
-    private void cadastrarProdutos(Produto produto){
-        produtoDao.salvar(produto);
+    private String lerTexto(String mensagem) {
+        System.out.print(mensagem);
+        return scanner.nextLine().trim();
+    }
+
+    private int lerInteiro(String mensagem) {
+        while (true) {
+            try {
+                System.out.print(mensagem);
+                int valor = Integer.parseInt(scanner.nextLine().trim());
+                return valor;
+            } catch (NumberFormatException e) {
+                System.out.println("Valor inválido. Digite um número inteiro.");
+            }
+        }
+    }
+
+    private long lerLong(String mensagem) {
+        while (true) {
+            try {
+                System.out.print(mensagem);
+                return Long.parseLong(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Valor inválido. Digite um número válido.");
+            }
+        }
+    }
+
+    private BigDecimal lerDecimal(String mensagem) {
+        while (true) {
+            try {
+                System.out.print(mensagem);
+                return new BigDecimal(scanner.nextLine().trim().replace(",", "."));
+            } catch (NumberFormatException e) {
+                System.out.println("Valor inválido. Digite um número decimal. Ex: 29.90");
+            }
+        }
+    }
+
+    private Produto cadastrarProdutos(Produto produto){
+        return produtoDao.salvar(produto);
     }
 
     private void listarProdutos() {
-        for (Produto produto : produtoDao.listarTodos()) {
-            System.out.println(produto);
+        try {
+            List<Produto> produtos = produtoDao.listarTodos();
+
+            if (produtos.isEmpty()) {
+                System.out.println("Nenhum produto cadastrado.");
+                return;
+            }
+
+            for (Produto produto : produtos) {
+                System.out.println(produto);
+            }
+
+        } catch (DataAccessException e) {
+            System.out.println("Erro ao buscar produtos. Tente novamente.");
+            System.err.println("[ERRO TÉCNICO] " + e.getMessage());
         }
     }
 
     private void buscarPorNome(String trecho){
-        List<Produto> itensEncontrados =  produtoDao.buscarPorNome(trecho);
 
-        if (itensEncontrados.isEmpty()){
-            System.out.println("Produto não encontrado");
-            return;
+        try {
+            List<Produto> itensEncontrados =  produtoDao.buscarPorNome(trecho);
+
+            if (itensEncontrados.isEmpty()){
+                System.out.println("Produto não encontrado");
+                return;
+            }
+            for (Produto produto : itensEncontrados) {
+                System.out.println(produto);
+            }
+        }catch (DataAccessException e){
+            System.err.println("Detalhes tecnicos: " + e.getMessage());
         }
-        for (Produto produto : itensEncontrados) {
-            System.out.println(produto);
-        }
+
     }
 
     private void atualizarEstoque(Long id, Integer estoque){

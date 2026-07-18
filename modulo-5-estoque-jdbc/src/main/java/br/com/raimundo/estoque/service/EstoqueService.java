@@ -3,6 +3,8 @@ package br.com.raimundo.estoque.service;
 import br.com.raimundo.estoque.connection.ConnectionFactory;
 import br.com.raimundo.estoque.dao.MovimentacaoDao;
 import br.com.raimundo.estoque.dao.ProdutoDao;
+import br.com.raimundo.estoque.exceptions.DataAccessException;
+import br.com.raimundo.estoque.exceptions.ProdutoNaoEncontradoException;
 import br.com.raimundo.estoque.model.Movimentacao;
 
 import java.sql.Connection;
@@ -42,8 +44,8 @@ public class EstoqueService {
                         );
 
                 if (!produtoAtualizado) {
-                    throw new IllegalStateException(
-                            "Produto não encontrado: " + idProduto
+                    throw new ProdutoNaoEncontradoException(
+                            idProduto
                     );
                 }
 
@@ -62,17 +64,22 @@ public class EstoqueService {
 
                 connection.commit();
 
-            } catch (SQLException | IllegalStateException e) {
+            } catch (SQLException e) {
                 executarRollback(connection, e);
 
-                throw new RuntimeException(
+                throw new DataAccessException(
                         "Não foi possível registrar a entrada de estoque.",
                         e
                 );
             }
 
+            catch (RuntimeException e) {
+                executarRollback(connection, e);
+                throw e;
+            }
+
         } catch (SQLException e) {
-            throw new RuntimeException(
+            throw new DataAccessException(
                     "Erro ao acessar o banco de dados.",
                     e
             );

@@ -17,16 +17,15 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-        //MenuProduto menu = new MenuProduto();
-        //menu.iniciar();
+        MenuProduto menu = new MenuProduto();
+        menu.iniciar();
 
-        ProdutoDao produtoDao = new ProdutoDaoJdbc();
-        MovimentacaoDao movimentacaoDao = new MovimentacaoDaoJdbc();
-
-        EstoqueService estoqueService = new EstoqueService(produtoDao, movimentacaoDao);
-
-        estoqueService.entradaEstoque(1L, 5);
-
+//        ProdutoDao produtoDao = new ProdutoDaoJdbc();
+//        MovimentacaoDao movimentacaoDao = new MovimentacaoDaoJdbc();
+//
+//        EstoqueService estoqueService = new EstoqueService(produtoDao, movimentacaoDao);
+//
+//        estoqueService.entradaEstoque(1L, 5);
 
     }
 
