@@ -125,7 +125,7 @@ public class ProdutoDaoJdbc implements ProdutoDao{
     public void atualizarEstoque(Long id, Integer novoEstoque) {
         String sql = """
                 UPDATE produtos
-                SET estoque = estoque + ?
+                SET estoque = ?
                 WHERE id = ?
                 """;
 
@@ -216,6 +216,26 @@ public class ProdutoDaoJdbc implements ProdutoDao{
 
     @Override
     public boolean incrementarEstoque(Connection connection, Long idProduto, Integer quantidade) throws SQLException {
+        String sql = """
+            UPDATE produtos
+            SET estoque = estoque + ?
+            WHERE id = ?
+            """;
+
+        try (PreparedStatement statement =
+                     connection.prepareStatement(sql)) {
+
+            statement.setInt(1, quantidade);
+            statement.setLong(2, idProduto);
+
+            int linhasAfetadas = statement.executeUpdate();
+
+            return linhasAfetadas == 1;
+        }
+    }
+
+    @Override
+    public boolean decrementarEstoque(Connection connection, Long idProduto, Integer quantidade) throws SQLException {
         String sql = """
             UPDATE produtos
             SET estoque = estoque + ?

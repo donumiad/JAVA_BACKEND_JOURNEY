@@ -105,10 +105,7 @@ public class EstoqueService {
         }
     }
 
-    private void executarRollback(
-            Connection connection,
-            Exception erroOriginal
-    ) {
+    private void executarRollback(Connection connection,Exception erroOriginal) {
         try {
             connection.rollback();
         } catch (SQLException erroRollback) {

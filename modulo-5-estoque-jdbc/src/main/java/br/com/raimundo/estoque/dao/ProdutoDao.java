@@ -28,6 +28,12 @@ public interface ProdutoDao {
             Long idProduto,
             Integer quantidade
     ) throws SQLException;
+
+    boolean decrementarEstoque(
+            Connection connection,
+            Long idProduto,
+            Integer quantidade
+    ) throws SQLException;
 }
 
 

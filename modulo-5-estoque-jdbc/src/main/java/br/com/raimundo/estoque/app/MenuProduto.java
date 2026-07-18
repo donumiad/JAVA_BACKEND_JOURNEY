@@ -1,9 +1,14 @@
 package br.com.raimundo.estoque.app;
 
+import br.com.raimundo.estoque.dao.MovimentacaoDao;
+import br.com.raimundo.estoque.dao.MovimentacaoDaoJdbc;
 import br.com.raimundo.estoque.dao.ProdutoDao;
 import br.com.raimundo.estoque.dao.ProdutoDaoJdbc;
 import br.com.raimundo.estoque.exceptions.DataAccessException;
+import br.com.raimundo.estoque.exceptions.ProdutoNaoEncontradoException;
+import br.com.raimundo.estoque.model.Movimentacao;
 import br.com.raimundo.estoque.model.Produto;
+import br.com.raimundo.estoque.service.EstoqueService;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -13,6 +18,8 @@ public class MenuProduto {
 
     private final Scanner scanner = new Scanner(System.in);
     private final ProdutoDao produtoDao = new ProdutoDaoJdbc();
+    private final MovimentacaoDao movimentacaoDao = new MovimentacaoDaoJdbc();
+    private final EstoqueService estoqueService = new EstoqueService(produtoDao, movimentacaoDao);
 
     public void iniciar() {
         int opcao = -1;
@@ -25,18 +32,8 @@ public class MenuProduto {
 
             switch (opcao) {
                 case 1:
-
-                    String nome = lerTexto("Digite o nome do produto: ");
-                    BigDecimal preco = lerDecimal("Digite o preco do produto: ");
-                    Integer estoque = lerInteiro("Digite estoque do produto: ");
-
-                    Produto produto = new Produto(nome, preco, estoque);
-
                     try {
-                        Produto salvo = cadastrarProdutos(produto); // recebe o produto com id
-                        System.out.println("Produto cadastrado com sucesso!");
-                        System.out.println("ID gerado: " + salvo.getId());
-                        System.out.println("Nome: "      + salvo.getNome());
+                        cadastrarProdutos();// recebe o produto com id
 
                     } catch (RuntimeException e) {
                         System.out.println("Erro ao cadastrar: " + e.getMessage());
@@ -53,14 +50,7 @@ public class MenuProduto {
                     buscarPorNome(trecho);
                     break;
                 case 4:
-                    System.out.println("Digite o id do produto: ");
-                    Long id = Long.parseLong(scanner.nextLine());
-
-                    System.out.println("Digite o nova quantidade no estoque: ");
-                    String texto = scanner.nextLine();
-
-                    int quantidadeNoEstoque = Integer.parseInt(texto);
-                    atualizarEstoque(id, quantidadeNoEstoque);
+                    registrarEntradaEstoque();
                     break;
                 case 5:
                     System.out.println("Digite o ID do produto a ser removido: ");
@@ -81,14 +71,19 @@ public class MenuProduto {
         System.out.println("1 - Cadastrar produto");
         System.out.println("2 - Listar produtos");
         System.out.println("3 - Buscar por nome");
-        System.out.println("4 - Atualizar quantidade");
+        System.out.println("4 - Incrementar quantidade");
         System.out.println("5 - Remover produto");
         System.out.println("0 - Sair");
     }
 
     private String lerTexto(String mensagem) {
         System.out.print(mensagem);
-        return scanner.nextLine().trim();
+        String texto = scanner.nextLine().trim();
+        if (texto.isBlank()){
+            throw new IllegalArgumentException("Este campo não pode ser vazio.");
+        }
+        return texto;
+
     }
 
     private int lerInteiro(String mensagem) {
@@ -103,7 +98,7 @@ public class MenuProduto {
         }
     }
 
-    private long lerLong(String mensagem) {
+    private Long lerLong(String mensagem) {
         while (true) {
             try {
                 System.out.print(mensagem);
@@ -125,8 +120,24 @@ public class MenuProduto {
         }
     }
 
-    private Produto cadastrarProdutos(Produto produto){
-        return produtoDao.salvar(produto);
+    private void cadastrarProdutos(){
+        String nome = lerTexto("Digite o nome do produto: ");
+        BigDecimal preco = lerDecimal("Digite o preco do produto: ");
+        Integer estoque = lerInteiro("Digite estoque do produto: ");
+
+        Produto produto = new Produto(nome, preco, estoque);
+
+         Produto salvo = produtoDao.salvar(produto);
+
+        System.out.println("Produto cadastrado com sucesso!");
+        System.out.println("ID gerado: " + salvo.getId());
+        System.out.println("Nome: "      + salvo.getNome());
+
+
+
+
+
+
     }
 
     private void listarProdutos() {
@@ -166,8 +177,27 @@ public class MenuProduto {
 
     }
 
-    private void atualizarEstoque(Long id, Integer estoque){
-        produtoDao.atualizarEstoque(id,estoque);
+    private void registrarEntradaEstoque() {
+        Long id = lerLong("Digite o id do produto: ");
+
+        int quantidadeEntrada = lerInteiro("Digite a quantidade de entrada: ");
+
+        try {
+            estoqueService.entradaEstoque(id, quantidadeEntrada);
+
+            System.out.println("Entrada de estoque registrada com sucesso.");
+
+        } catch (ProdutoNaoEncontradoException e) {
+            System.out.println(e.getMessage());
+
+        } catch (IllegalArgumentException e) {
+            System.out.println( "Valor inválido: " + e.getMessage());
+
+        } catch (DataAccessException e) {
+            System.out.println("Não foi possível registrar a entrada de estoque.");
+
+            e.printStackTrace();
+        }
     }
 
     private void removerProduto(Long id){

@@ -8,162 +8,73 @@
   <img src="https://img.shields.io/badge/Status-In%20Progress-yellow" alt="Status" />
 </p>
 
+# Sistema de Estoque com JDBC
+
 ## Sobre o projeto
 
-Este repositório documenta minha jornada de formação em **Backend com Java**, com foco em construção de base sólida, prática constante e desenvolvimento de projetos alinhados ao mercado.
+Aplicação Java em console para gerenciamento de produtos e
+movimentações de estoque utilizando JDBC e PostgreSQL.
 
-A proposta é evoluir de forma progressiva, saindo do **Java Core** até a criação de aplicações backend completas com:
+O projeto foi desenvolvido como parte de um roteiro de estudos
+em backend Java.
 
-- APIs REST
-- banco de dados relacional
-- autenticação e autorização
-- testes automatizados
-- Docker
-- boas práticas de arquitetura
+## Funcionalidades
 
-Mais do que estudar teoria, o objetivo aqui é **transformar aprendizado em entrega prática**.
+- Cadastrar produtos
+- Listar produtos
+- Buscar produto por id
+- Buscar produtos por nome
+- Atualizar dados de produto
+- Atualizar quantidade
+- Remover produtos
+- Registrar entrada de estoque
+- Registrar movimentação de estoque
+- Executar transações com commit e rollback
 
----
-<details>
-<summary>
-  ## Objetivo
-</summary>
+## Tecnologias
 
-Me tornar capaz de desenvolver aplicações backend completas em Java, com domínio dos principais fundamentos e ferramentas do ecossistema moderno.
-
-Ao final da jornada, a meta é conseguir:
-
-- construir APIs REST completas
-- integrar aplicações com banco de dados relacional
-- aplicar JPA/Hibernate e Spring Data JPA
-- proteger rotas com Spring Security e JWT
-- escrever testes com JUnit e Mockito
-- organizar código com boas práticas
-- containerizar aplicações com Docker
-- montar um portfólio consistente para vagas de backend júnior
-
----
-</details>
-
-## Roadmap de estudo
-
-<details>
-<summary>
-  ### 1. Base de programação e Java Core
-</summary>
-- lógica de programação
-- sintaxe Java
-- orientação a objetos
-- coleções
-- generics
-- streams
-- exceptions
-- `java.time`
-</details>
-
-<details>
-<summary>
-  ### 2. Banco de dados e persistência
-</summary>
-- SQL
-- modelagem relacional
-- Maven
+- Java
 - JDBC
-- JPA
-- Hibernate
-</details>
+- PostgreSQL
+- Maven
+- Git
 
-<details>
-<summary>
-  ### 3. Backend com Spring
-</summary>
-- Spring Boot
-- APIs REST
-- DTOs
-- validação
-- tratamento de erros
-- Spring Data JPA
-</details>
+## Arquitetura
 
-<details>
-<summary>
-  ### 4. Segurança e testes
-</summary>
-- Spring Security
-- autenticação e autorização
-- JWT
-- JUnit
-- Mockito
-- testes de integração
-</details>
+- Model: representação dos objetos
+- DAO: acesso aos dados
+- Service: regras e transações
+- App: menu e execução
+- Connection: configuração da conexão
 
-<details>
-<summary>
-  ### 5. Profissionalização e entrega
-</summary>
-- Clean Code
-- SOLID
-- arquitetura em camadas
-- Docker
-- cloud básica
-- projeto final de portfólio
-</details>
+## Banco de dados
 
+O projeto utiliza uma base PostgreSQL com as tabelas:
 
-### Projeto final de portfólio
-Backend de Academia
+- produtos
+- movimentacoes_estoque
 
-Funcionalidades previstas:
-- cadastro de usuários
-- login com JWT
-- cadastro de alunos
-- cadastro de treinos
-- histórico de execução
-- plano mensal
-- perfis `ADMIN` e `ALUNO`
-- filtros
-- paginação
-- testes
-- Docker Compose
-- documentação no README
-- documentação de endpoints
+A tabela produtos foi reaproveitada de um projeto anterior
+que também possui clientes, pedidos e itens_pedido.
 
----
+## Como executar
 
-## Tecnologias principais
+1. Criar ou configurar o banco PostgreSQL.
+2. Executar os scripts da pasta sql.
+3. Configurar as credenciais do banco.
+4. Executar a classe Main.
 
-- **Java**
-- **Spring Boot**
-- **Spring Data JPA**
-- **Spring Security**
-- **PostgreSQL**
-- **Maven**
-- **JUnit**
-- **Mockito**
-- **Docker**
+## Conceitos praticados
 
----
-
-
-## Progresso
-
-Este repositório será usado para registrar:
-
-- projetos desenvolvidos
-- exercícios
-- anotações
-- commits de evolução
-- aprendizados por módulo
-- melhorias de código ao longo da jornada
-
----
-
-## Status atual
-
-**Em construção.**  
-Este repositório faz parte da minha evolução prática em desenvolvimento backend com Java.
-
----
+- Connection
+- PreparedStatement
+- ResultSet
+- DAO Pattern
+- SQL parametrizado
+- Tratamento de SQLException
+- Transações
+- Commit e rollback
+- Separação entre DAO, Service e Menu
 
 ## Contato
 
