@@ -1,5 +1,6 @@
 package br.com.raimundo.estoque.controller;
 
+import br.com.raimundo.estoque.dto.ProdutoResponse;
 import br.com.raimundo.estoque.model.Produto;
 import br.com.raimundo.estoque.service.ProdutoService;
 import org.springframework.http.ResponseEntity;
@@ -23,18 +24,24 @@ public class ProdutoController {
     }
 
     @GetMapping
-    public List<Produto> listar(
+    public List<ProdutoResponse> listar(
             @RequestParam(required = false) String nome
     ) {
+        List<Produto> produtos;
+
         if (nome == null || nome.isBlank()) {
-            return produtoService.listarTodos();
+            produtos = produtoService.listarTodos();
+        } else {
+            produtos = produtoService.buscarPorNome(nome);
         }
 
-        return produtoService.buscarPorNome(nome);
+        return produtos.stream()
+                .map(ProdutoResponse::from)
+                .toList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Produto> buscarPorId(
+    public ResponseEntity<ProdutoResponse> buscarPorId(
             @PathVariable Long id
     ) {
         Optional<Produto> produtoEncontrado =
@@ -44,6 +51,9 @@ public class ProdutoController {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(produtoEncontrado.get());
+        ProdutoResponse response =
+                ProdutoResponse.from(produtoEncontrado.get());
+
+        return ResponseEntity.ok(response);
     }
 }
