@@ -23,7 +23,7 @@ public class ProdutoController {
         this.produtoService = produtoService;
     }
 
-    @GetMapping
+    @GetMapping()
     public List<ProdutoResponse> listar(
             @RequestParam(required = false) String nome
     ) {
