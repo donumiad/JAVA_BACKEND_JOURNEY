@@ -12,4 +12,11 @@ public interface ProdutoRepository {
     Optional<Produto> buscarPorId(Long id);
 
     List<Produto> buscarPorNome(String nome);
+
+    Produto salvar(Produto produto);
+
+    boolean atualizar(Produto produto);
+    boolean removerPorId(Long id);
+
+    boolean atualizarEstoque(Long id, Integer novoEstoque);
 }
