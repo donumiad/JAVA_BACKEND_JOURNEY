@@ -1,10 +1,13 @@
 package br.com.raimundo.estoque.service;
 
+import br.com.raimundo.estoque.exception.EstoqueInsuficienteException;
+import br.com.raimundo.estoque.exception.ProdutoNaoEncontradoException;
 import br.com.raimundo.estoque.model.Movimentacao;
 import br.com.raimundo.estoque.model.Produto;
 import br.com.raimundo.estoque.repository.MovimentacaoRepository;
 import br.com.raimundo.estoque.repository.ProdutoRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,19 +30,25 @@ public class MovimentacaoService {
         return movimentacaoRepository.listarTodas();
     }
 
+    @Transactional
     public Optional<Movimentacao> registrarEntrada(
             Long produtoId,
             Integer quantidade
     ) {
 
-        Optional<Produto> produtoEncontrado =
-                produtoRepository.buscarPorId(produtoId);
+//        Optional<Produto> produtoEncontrado =
+//                produtoRepository.buscarPorId(produtoId);
+//
+//        if (produtoEncontrado.isEmpty()) {
+//            return Optional.empty();
+//        }
 
-        if (produtoEncontrado.isEmpty()) {
-            return Optional.empty();
-        }
+        Produto produto = produtoRepository.buscarPorId(produtoId)
+                .orElseThrow(
+                        () -> new ProdutoNaoEncontradoException(produtoId)
+                );
 
-        Produto produto = produtoEncontrado.get();
+        //Produto produto = produtoEncontrado.get();
 
         int novoEstoque =
                 produto.getEstoque() + quantidade;
@@ -61,23 +70,42 @@ public class MovimentacaoService {
         );
     }
 
+
+//    public Optional<Movimentacao> registrarSaida(
+//            Long produtoId,
+//            Integer quantidade
+//    ) {
+//
+//        Optional<Produto> produtoEncontrado =
+//                produtoRepository.buscarPorId(produtoId);
+//
+//        if (produtoEncontrado.isEmpty()) {
+//            return Optional.empty();
+//        }
+//
+//        Produto produto = produtoEncontrado.get();
+//
+//        if (quantidade > produto.getEstoque()) {
+//            throw new EstoqueInsuficienteException(
+//                    produto.getEstoque(),
+//                    quantidade
+//            );
+//        }
+    @Transactional
     public Optional<Movimentacao> registrarSaida(
             Long produtoId,
             Integer quantidade
     ) {
 
-        Optional<Produto> produtoEncontrado =
-                produtoRepository.buscarPorId(produtoId);
-
-        if (produtoEncontrado.isEmpty()) {
-            return Optional.empty();
-        }
-
-        Produto produto = produtoEncontrado.get();
+        Produto produto = produtoRepository.buscarPorId(produtoId)
+                .orElseThrow(
+                        () -> new ProdutoNaoEncontradoException(produtoId)
+                );
 
         if (quantidade > produto.getEstoque()) {
-            throw new IllegalStateException(
-                    "Estoque insuficiente"
+            throw new EstoqueInsuficienteException(
+                    produto.getEstoque(),
+                    quantidade
             );
         }
 

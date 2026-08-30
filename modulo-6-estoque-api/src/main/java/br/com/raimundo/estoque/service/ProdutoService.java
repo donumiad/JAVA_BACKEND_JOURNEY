@@ -1,5 +1,6 @@
 package br.com.raimundo.estoque.service;
 
+import br.com.raimundo.estoque.exception.ProdutoNaoEncontradoException;
 import br.com.raimundo.estoque.model.Produto;
 import br.com.raimundo.estoque.repository.ProdutoRepository;
 import org.springframework.stereotype.Service;
@@ -21,8 +22,11 @@ public class ProdutoService {
         return produtoRepository.listarTodos();
     }
 
-    public Optional<Produto> buscarPorId(Long id) {
-        return produtoRepository.buscarPorId(id);
+    public Produto buscarPorId(Long id) {
+        return produtoRepository.buscarPorId(id)
+                .orElseThrow(
+                        () -> new ProdutoNaoEncontradoException(id)
+                );
     }
 
     public List<Produto> buscarPorNome(String nome) {

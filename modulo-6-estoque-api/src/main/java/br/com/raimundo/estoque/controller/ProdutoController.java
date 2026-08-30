@@ -42,20 +42,24 @@ public class ProdutoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProdutoResponse> buscarPorId(
+    public ProdutoResponse buscarPorId(
             @PathVariable Long id
     ) {
-        Optional<Produto> produtoEncontrado =
+        Produto produto =
                 produtoService.buscarPorId(id);
 
-        if (produtoEncontrado.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        ProdutoResponse response =
-                ProdutoResponse.from(produtoEncontrado.get());
-
-        return ResponseEntity.ok(response);
+        return ProdutoResponse.from(produto);
+//        Optional<Produto> produtoEncontrado =
+//                Optional.ofNullable(produtoService.buscarPorId(id));
+//
+//        if (produtoEncontrado.isEmpty()) {
+//            return ResponseEntity.notFound().build();
+//        }
+//
+//        ProdutoResponse response =
+//                ProdutoResponse.from(produtoEncontrado.get());
+//
+//        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/cadastrar")
