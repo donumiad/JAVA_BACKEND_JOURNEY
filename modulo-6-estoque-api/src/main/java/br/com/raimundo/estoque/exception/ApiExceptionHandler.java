@@ -167,4 +167,30 @@ public class ApiExceptionHandler {
 
         return problem;
     }
+
+    @ExceptionHandler(ParametroInvalidoException.class)
+    public ProblemDetail tratarParametroInvalido(
+            ParametroInvalidoException ex,
+            HttpServletRequest request
+    ) {
+
+        ProblemDetail problema =
+                ProblemDetail.forStatusAndDetail(
+                        HttpStatus.BAD_REQUEST,
+                        ex.getMessage()
+                );
+
+        problema.setTitle("Parâmetro inválido");
+
+        problema.setInstance(
+                URI.create(request.getRequestURI())
+        );
+
+        problema.setProperty(
+                "timestamp",
+                OffsetDateTime.now()
+        );
+
+        return problema;
+    }
 }

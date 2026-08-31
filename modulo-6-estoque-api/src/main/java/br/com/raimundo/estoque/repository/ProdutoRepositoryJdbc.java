@@ -8,7 +8,9 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -19,6 +21,14 @@ public class ProdutoRepositoryJdbc implements ProdutoRepository {
 
     private static final String COLUNAS =
             "id, nome, preco, estoque";
+
+    private static final Map<String, String> COLUNAS_ORDENACAO =
+            Map.of(
+                    "id", "id",
+                    "nome", "nome",
+                    "preco", "preco",
+                    "estoque", "estoque"
+            );
 
     public ProdutoRepositoryJdbc(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -148,4 +158,78 @@ public class ProdutoRepositoryJdbc implements ProdutoRepository {
 
         return linhasAfetadas > 0;
     }
+
+    @Override
+    public List<Produto> buscarPaginado(
+            String nome,
+            int page,
+            int size,
+            String sort,
+            String direction
+    ) {
+
+        String colunaOrdenacao =
+                COLUNAS_ORDENACAO.get(sort);
+
+        String direcao =
+                direction.equalsIgnoreCase("desc")
+                        ? "DESC"
+                        : "ASC";
+
+        StringBuilder sql = new StringBuilder(""" 
+            SELECT id, nome, preco, estoque
+            FROM produtos
+            WHERE 1 = 1
+            """);  //entender o que é esse stringbuilder
+
+        List<Object> parametros = new ArrayList<>();
+
+        if (nome != null && !nome.isBlank()) {
+            sql.append(" AND nome ILIKE ?");
+            parametros.add("%" + nome + "%");
+        }
+
+        sql.append(" ORDER BY ")
+                .append(colunaOrdenacao)
+                .append(" ")
+                .append(direcao);
+
+        sql.append(" LIMIT ? OFFSET ?");
+
+        parametros.add(size);
+        parametros.add(page * size);
+
+        return jdbcTemplate.query(
+                sql.toString(),
+                rowMapper, //Transforma cada linha do resultSet em Produto
+                parametros.toArray() //O JDBCTEMPLATE recebe 3 parametros
+                                    //o SQL, o tipo de retorno e os parametros que iram subistituir os "?"
+        );
+    }
+
+    @Override
+    public long contar(String nome) {
+
+        StringBuilder sql = new StringBuilder("""
+            SELECT COUNT(*)
+            FROM produtos
+            WHERE 1 = 1
+            """);
+
+        List<Object> parametros = new ArrayList<>();
+
+        if (nome != null && !nome.isBlank()) {
+            sql.append(" AND nome ILIKE ?");
+            parametros.add("%" + nome + "%");
+        }
+
+        Long total = jdbcTemplate.queryForObject(
+                sql.toString(),
+                Long.class,
+                parametros.toArray()
+        );
+
+        return total != null ? total : 0L;
+    }
+
 }

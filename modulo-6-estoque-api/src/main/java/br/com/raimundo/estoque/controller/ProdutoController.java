@@ -1,8 +1,10 @@
 package br.com.raimundo.estoque.controller;
 
 import br.com.raimundo.estoque.dto.ProdutoCreateRequest;
+import br.com.raimundo.estoque.dto.ProdutoPageResponse;
 import br.com.raimundo.estoque.dto.ProdutoResponse;
 import br.com.raimundo.estoque.dto.ProdutoUpdateRequest;
+import br.com.raimundo.estoque.model.PaginaProduto;
 import br.com.raimundo.estoque.model.Produto;
 import br.com.raimundo.estoque.service.ProdutoService;
 import jakarta.validation.Valid;
@@ -24,21 +26,50 @@ public class ProdutoController {
         this.produtoService = produtoService;
     }
 
-    @GetMapping()
-    public List<ProdutoResponse> listar(
-             @RequestParam(required = false) String nome
+
+//    public List<ProdutoResponse> listar(
+//             @RequestParam(required = false) String nome
+//    ) {
+//        List<Produto> produtos;
+//
+//        if (nome == null || nome.isBlank()) {
+//            produtos = produtoService.listarTodos();
+//        } else {
+//            produtos = produtoService.buscarPorNome(nome);
+//        }
+//
+//        return produtos.stream()
+//                .map(ProdutoResponse::from)
+//                .toList();
+//    }
+    @GetMapping
+    public ProdutoPageResponse listar(
+            @RequestParam(required = false)
+            String nome,
+
+            @RequestParam(defaultValue = "0")
+            int page,
+
+            @RequestParam(defaultValue = "10")
+            int size,
+
+            @RequestParam(defaultValue = "nome")
+            String sort,
+
+            @RequestParam(defaultValue = "asc")
+            String direction
     ) {
-        List<Produto> produtos;
 
-        if (nome == null || nome.isBlank()) {
-            produtos = produtoService.listarTodos();
-        } else {
-            produtos = produtoService.buscarPorNome(nome);
-        }
+        PaginaProduto pagina =
+                produtoService.listarPaginado(
+                        nome,
+                        page,
+                        size,
+                        sort,
+                        direction
+                );
 
-        return produtos.stream()
-                .map(ProdutoResponse::from)
-                .toList();
+        return ProdutoPageResponse.from(pagina);
     }
 
     @GetMapping("/{id}")

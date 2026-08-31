@@ -19,4 +19,14 @@ public interface ProdutoRepository {
     boolean removerPorId(Long id);
 
     boolean atualizarEstoque(Long id, Integer novoEstoque);
+
+    List<Produto> buscarPaginado(
+            String nome,
+            int page,
+            int size,
+            String sort,
+            String direction
+    );
+
+    long contar(String nome);
 }
