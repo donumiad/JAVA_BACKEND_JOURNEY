@@ -1,6 +1,8 @@
-POST http://localhost:8080/api/produtos/1/saidas
+POST http://localhost:8080/api/produtos/cadastrar
 Content-Type: application/json
 
 {
-  "quantidade": 100
+  "nome": "Mouse",
+  "preco": abc,
+  "estoque": 5
 }

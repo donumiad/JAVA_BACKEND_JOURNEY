@@ -170,6 +170,11 @@ public class ProdutoRepositoryJdbc implements ProdutoRepository {
 
         String colunaOrdenacao =
                 COLUNAS_ORDENACAO.get(sort);
+        if (colunaOrdenacao == null) {
+            throw new IllegalArgumentException(
+                    "Ordenação não suportada pelo repository: " + sort
+            );
+        }
 
         String direcao =
                 direction.equalsIgnoreCase("desc")
