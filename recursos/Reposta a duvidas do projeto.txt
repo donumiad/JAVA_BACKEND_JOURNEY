@@ -1,0 +1,145 @@
+Excelente conjunto de perguntas — você está tentando montar o quebra-cabeça, e as peças ainda estão soltas. Vou responder cada uma de forma direta e depois mostrar como tudo se encaixa.
+
+---
+
+## Maven — o que ele realmente faz
+
+Maven não tem nada a ver com arquitetura. São mundos completamente separados.
+
+**Maven é uma ferramenta de construção do projeto.** Ele resolve três coisas:
+
+**1. Dependências.** Quando você quer usar Spring Boot, PostgreSQL, Jackson — você não baixa os `.jar` manualmente. Você declara no `pom.xml` e o Maven baixa automaticamente do repositório central da internet.
+
+**2. Build.** Compila seu código Java, roda os testes, empacota tudo num `.jar` executável — com um único comando `mvn package`.
+
+**3. Convenção de estrutura.** Maven define onde o código-fonte fica (`src/main/java`), onde os testes ficam (`src/test/java`), onde os recursos ficam (`src/main/resources`). Qualquer desenvolvedor que abre um projeto Maven sabe onde está tudo.
+
+Maven não sabe nada sobre `controller`, `service`, `repository`. Essas pastas você criou — Maven apenas as compila porque estão dentro de `src/main/java`. Se você criasse pastas chamadas `banana`, `abacaxi`, `laranja`, o Maven compilaria do mesmo jeito.
+
+**A arquitetura em camadas é sobre como você organiza o código. Maven é sobre como você constrói o projeto.** São ferramentas para problemas completamente diferentes.
+
+---
+
+## Arquitetura em camadas — o que é
+
+Arquitetura é a decisão de **como organizar as responsabilidades do sistema**. É uma decisão de design que você toma — não uma ferramenta que você instala.
+
+Arquitetura em camadas diz: separe seu sistema em grupos de responsabilidades. Cada grupo só conhece o grupo imediatamente abaixo dele.
+
+```
+Controller  → responsabilidade: HTTP
+Service     → responsabilidade: regras de negócio
+Repository  → responsabilidade: banco de dados
+Model       → responsabilidade: representar entidades
+```
+
+Você poderia colocar tudo num único arquivo Java gigante e o Maven compilaria feliz. A arquitetura em camadas é uma **decisão humana** — não uma exigência técnica do Maven nem do Spring.
+
+---
+
+## REST — o que é e como difere de arquitetura em camadas
+
+Aqui está a distinção mais importante: **REST e arquitetura em camadas respondem perguntas diferentes**.
+
+**Arquitetura em camadas** responde: *como organizo o código interno da aplicação?*
+
+**REST** responde: *como minha aplicação se comunica com o mundo externo via HTTP?*
+
+REST é um conjunto de convenções sobre como usar HTTP:
+- Use URIs para identificar recursos — `/api/produtos/7`
+- Use métodos HTTP com semântica correta — `GET` lê, `POST` cria, `DELETE` remove
+- Use JSON como formato de dados
+- Use status HTTP para comunicar o resultado — `200`, `201`, `404`, `500`
+
+Uma aplicação pode ser REST sem arquitetura em camadas. Pode ter arquitetura em camadas sem ser REST. No seu projeto, você usa os dois juntos — REST define como a API se comunica com clientes externos, arquitetura em camadas define como o código interno está organizado.
+
+Pense assim:
+
+```
+Mundo externo                    Mundo interno
+(clientes HTTP)                  (seu código)
+     ↓                                ↓
+   REST                     Arquitetura em Camadas
+(como a API fala)            (como o código é organizado)
+```
+
+---
+
+## Spring Boot — serve para qualquer arquitetura?
+
+Sim — Spring Boot é um framework que pode ser usado com qualquer arquitetura. Ele não te obriga a usar arquitetura em camadas.
+
+Mas ele oferece ferramentas que se encaixam perfeitamente nela — `@Controller`, `@Service`, `@Repository` são anotações que o Spring fornece exatamente para marcar as camadas. Não é coincidência — o Spring foi projetado pensando nesse padrão.
+
+Você poderia usar Spring Boot com arquitetura hexagonal, arquitetura CQRS, microserviços, ou qualquer outro padrão. Mas para o nível onde você está — e para a grande maioria dos projetos corporativos brasileiros — arquitetura em camadas com Spring Boot é o padrão dominante.
+
+---
+
+## Os módulos mais importantes do Spring
+
+Spring não é um único programa — é um ecossistema de módulos. Os mais usados no backend:
+
+**Spring Core** — o coração. Implementa IoC e injeção de dependência. É o que faz `@Service`, `@Repository` e injeção por construtor funcionarem. Tudo mais depende disso.
+
+**Spring MVC** — a camada web. Implementa `@RestController`, `@GetMapping`, `@RequestBody`, `ResponseEntity`. É o que transforma seu código Java numa API HTTP.
+
+**Spring Boot** — não é um módulo de funcionalidade — é um módulo de *configuração automática*. Ele detecta o que está no classpath e configura tudo automaticamente. Sem Spring Boot, você configuraria Spring Core e Spring MVC manualmente com centenas de linhas de XML ou Java.
+
+**Spring Data** — abstração de persistência. Spring Data JPA gera implementações de repository automaticamente. Spring Data JDBC é uma versão mais simples. Você vai estudar isso no Módulo 7.
+
+**Spring Security** — autenticação e autorização. Quem pode acessar o quê. Vem em módulos futuros.
+
+**Spring Transaction** — gerenciamento de transações. É onde `@Transactional` vive.
+
+---
+
+## JdbcTemplate, HikariCP, Bean Validation, ProblemDetail, @Transactional — o que são
+
+Esses não formam uma arquitetura. São ferramentas e técnicas que resolvem problemas específicos. Vou categorizar cada um:
+
+**JdbcTemplate** — é uma **biblioteca** do Spring que elimina o boilerplate do JDBC manual. Pertence ao módulo Spring JDBC. Técnica: abstração sobre API de baixo nível.
+
+**HikariCP** — é uma **biblioteca** independente de pool de conexões. Não é do Spring — o Spring apenas a integra como padrão. Resolve um problema de performance e escalabilidade. Técnica: connection pooling.
+
+**Bean Validation** — é uma **especificação** Java (`jakarta.validation`). Define como declarar restrições em objetos. `@NotBlank`, `@Positive` são dessa especificação. Implementada pelo Hibernate Validator. Técnica: validação declarativa.
+
+**ProblemDetail** — é a implementação Spring de um **padrão internacional** (RFC 9457) para formato de erros em APIs HTTP. É uma boa prática elevada a padrão de mercado.
+
+**@Transactional** — é uma **anotação** do Spring Transaction que implementa o padrão de design *Declarative Transaction Management*. Técnica: gerenciamento declarativo de transações.
+
+O conceito macro que engloba todos eles não é uma arquitetura — é a ideia de **programação declarativa**: você *declara* o que quer (`@Valid`, `@Transactional`, `@NotBlank`) e o framework implementa por baixo. Em vez de escrever código imperativo — "abra a conexão, desative o autocommit, execute, faça commit, feche" — você declara a intenção e o Spring cuida do resto.
+
+---
+
+## O mapa consolidado
+
+Para nunca mais confundir o papel de cada coisa:
+
+```
+PARA QUE SERVE          FERRAMENTA/CONCEITO
+─────────────────────────────────────────────────────
+Construir o projeto     Maven
+Gerenciar dependências  Maven (pom.xml)
+─────────────────────────────────────────────────────
+Organizar o código      Arquitetura em camadas
+interno                 (sua decisão de design)
+─────────────────────────────────────────────────────
+Comunicar via HTTP      REST
+com clientes externos   (convenções sobre HTTP)
+─────────────────────────────────────────────────────
+Implementar IoC/DI      Spring Core
+Implementar HTTP/REST   Spring MVC
+Autoconfigurar tudo     Spring Boot
+Persistência avançada   Spring Data (Módulo 7)
+Segurança               Spring Security (futuro)
+─────────────────────────────────────────────────────
+Eliminar boilerplate    JdbcTemplate
+de JDBC
+Pool de conexões        HikariCP
+Validação declarativa   Bean Validation
+Formato de erros HTTP   ProblemDetail / RFC 9457
+Transações declarativas @Transactional
+─────────────────────────────────────────────────────
+```
+
+Cada linha resolve um problema diferente. Eles coexistem no mesmo projeto porque cada um resolve uma coisa que os outros não resolvem.
