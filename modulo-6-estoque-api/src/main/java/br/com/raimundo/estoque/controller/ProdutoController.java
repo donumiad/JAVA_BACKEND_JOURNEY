@@ -36,7 +36,6 @@ public class ProdutoController {
         this.produtoService = produtoService;
     }
 
-
 //    public List<ProdutoResponse> listar(
 //             @RequestParam(required = false) String nome
 //    ) {
