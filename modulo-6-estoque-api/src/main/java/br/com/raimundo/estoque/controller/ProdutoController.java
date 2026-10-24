@@ -62,6 +62,7 @@ public class ProdutoController {
                     description = "Trecho opcional do nome do produto",
                     example = "mouse"
             )
+
             @RequestParam(required = false)
             String nome,
 
@@ -69,6 +70,7 @@ public class ProdutoController {
                     description = "Número da página, iniciando em zero",
                     example = "0"
             )
+
             @RequestParam(defaultValue = "0")
             int page,
 
@@ -76,6 +78,7 @@ public class ProdutoController {
                     description = "Quantidade de produtos por página",
                     example = "10"
             )
+
             @RequestParam(defaultValue = "10")
             int size,
 
@@ -83,6 +86,7 @@ public class ProdutoController {
                     description = "Campo usado para ordenação: id, nome, preco ou estoque",
                     example = "preco"
             )
+
             @RequestParam(defaultValue = "nome")
             String sort,
 
@@ -90,6 +94,7 @@ public class ProdutoController {
                     description = "Direção da ordenação: asc ou desc",
                     example = "desc"
             )
+
             @RequestParam(defaultValue = "asc")
             String direction
     ) {
@@ -103,7 +108,7 @@ public class ProdutoController {
                         direction
                 );
 
-        return ProdutoPageResponse.from(pagina);
+        return ProdutoPageResponse.from(pagina); //perguntar pq o nome do metodo e igual ao da classe
     }
 
     @Operation(
@@ -133,6 +138,7 @@ public class ProdutoController {
                 produtoService.buscarPorId(id);
 
         return ProdutoResponse.from(produto);
+
 //        Optional<Produto> produtoEncontrado =
 //                Optional.ofNullable(produtoService.buscarPorId(id));
 //
@@ -160,7 +166,7 @@ public class ProdutoController {
                     description = "Dados de entrada inválidos"
             )
     })
-    @PostMapping("/cadastrar")
+    @PostMapping
     public ResponseEntity<ProdutoResponse> cadastrar(
             @Valid @RequestBody ProdutoCreateRequest request
     ) {

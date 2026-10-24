@@ -12,9 +12,13 @@ import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
     @ExceptionHandler(ProdutoNaoEncontradoException.class)
     public ProblemDetail tratarProdutoNaoEncontrado(
@@ -151,6 +155,11 @@ public class ApiExceptionHandler {
             HttpServletRequest request
     ) {
 
+        log.error(
+                "Erro inesperado ao processar {}",
+                request.getRequestURI(),
+                ex
+        );
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 "Ocorreu um erro interno inesperado"

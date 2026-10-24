@@ -11,9 +11,13 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class ProdutoService {
+
+    private static final Logger log = LoggerFactory.getLogger(ProdutoService.class);
 
     private final ProdutoRepository produtoRepository;
 
@@ -37,7 +41,16 @@ public class ProdutoService {
     }
 
     public Produto cadastrar(Produto produto) {
-        return produtoRepository.salvar(produto);
+        Produto produtoCriado =
+                produtoRepository.salvar(produto);
+
+        log.info(
+                "Produto cadastrado. id={}, nome={}",
+                produtoCriado.getId(),
+                produtoCriado.getNome()
+        );
+
+        return produtoCriado;
     }
 
     public Optional<Produto> atualizar(

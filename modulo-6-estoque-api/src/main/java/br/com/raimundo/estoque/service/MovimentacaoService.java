@@ -11,10 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class MovimentacaoService {
 
+    private static final Logger log = LoggerFactory.getLogger(MovimentacaoService.class);
     private final ProdutoRepository produtoRepository;
     private final MovimentacaoRepository movimentacaoRepository;
 
@@ -65,9 +68,16 @@ public class MovimentacaoService {
                         quantidade
                 );
 
-        return Optional.of(
-                movimentacaoRepository.salvar(movimentacao)
+        Movimentacao movimentacaoSalva = movimentacaoRepository.salvar(movimentacao);
+
+        log.info(
+                "Entrada de estoque registrada. produtoId={}, quantidade={}, novoEstoque={}",
+                produtoId,
+                quantidade,
+                novoEstoque
         );
+
+        return Optional.of(movimentacaoSalva);
     }
 
 
@@ -103,6 +113,13 @@ public class MovimentacaoService {
                 );
 
         if (quantidade > produto.getEstoque()) {
+
+            log.warn(
+                    "Saída rejeitada por estoque insuficiente. produtoId={}, estoqueAtual={}, quantidadeSolicitada={}",
+                    produtoId,
+                    produto.getEstoque(),
+                    quantidade
+            );
             throw new EstoqueInsuficienteException(
                     produto.getEstoque(),
                     quantidade
@@ -124,8 +141,16 @@ public class MovimentacaoService {
                         quantidade
                 );
 
-        return Optional.of(
-                movimentacaoRepository.salvar(movimentacao)
+        Movimentacao movimentacaoSalva =
+                movimentacaoRepository.salvar(movimentacao);
+
+        log.info(
+                "Saída de estoque registrada. produtoId={}, quantidade={}, novoEstoque={}",
+                produtoId,
+                quantidade,
+                novoEstoque
         );
+
+        return Optional.of(movimentacaoSalva);
     }
 }
