@@ -139,17 +139,6 @@ public class ProdutoController {
 
         return ProdutoResponse.from(produto);
 
-//        Optional<Produto> produtoEncontrado =
-//                Optional.ofNullable(produtoService.buscarPorId(id));
-//
-//        if (produtoEncontrado.isEmpty()) {
-//            return ResponseEntity.notFound().build();
-//        }
-//
-//        ProdutoResponse response =
-//                ProdutoResponse.from(produtoEncontrado.get());
-//
-//        return ResponseEntity.ok(response);
     }
 
     @Operation(
