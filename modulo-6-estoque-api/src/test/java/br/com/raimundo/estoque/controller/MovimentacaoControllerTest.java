@@ -30,7 +30,7 @@ class MovimentacaoControllerTest {
 
     @Test
     @DisplayName("POST /api/produtos retorna 400 quando preço é negativo")
-    void deveRetornar409QuandoEstoqueForInsuficiente()
+    void deveRetornar400QuandoEstoqueForInsuficiente()
             throws Exception {
 
         when(

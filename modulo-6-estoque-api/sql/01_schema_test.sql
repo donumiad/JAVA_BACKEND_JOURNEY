@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS produtos (
     id BIGSERIAL PRIMARY KEY,
     nome VARCHAR(300) NOT NULL,
     preco NUMERIC(10,2) NOT NULL
-        CHECK (preco >= 0),
+        CHECK (preco > 0),
     estoque BIGINT NOT NULL
         CHECK (estoque >= 0)
 );
