@@ -1,6 +1,7 @@
 
 package br.com.raimundo.estoque;
 
+import br.com.raimundo.estoque.persistence.entity.ProdutoEntity;
 import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +28,14 @@ class InfraestruturaJpaTest {
 
         assertNotNull(entityManagerFactory);
         assertNotNull(jdbcTemplate);
+    }
+    @Test
+    void deveReconhecerProdutoComoEntidadeJpa() {
+
+        var entidade = entityManagerFactory
+                .getMetamodel()
+                .entity(ProdutoEntity.class);
+
+        assertNotNull(entidade);
     }
 }
