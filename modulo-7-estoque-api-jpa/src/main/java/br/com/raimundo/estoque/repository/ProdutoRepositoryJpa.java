@@ -61,7 +61,7 @@ public class ProdutoRepositoryJpa implements ProdutoRepository {
 
 
     @Override
-    public boolean atualizarEstoque(Long id, Integer novoEstoque) {
+    public boolean atualizarEstoque(Long id, Long novoEstoque) {
         return false;
     }
 

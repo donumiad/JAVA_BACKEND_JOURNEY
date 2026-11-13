@@ -19,7 +19,7 @@ public class MovimentacaoRowMapper
                 rs.getLong("id"),
                 rs.getLong("produto_id"),
                 rs.getString("tipo_movimentacao"),
-                rs.getInt("quantidade"),
+                rs.getLong("quantidade"),
                 rs.getObject(
                         "data_movimentacao",
                         java.time.LocalDateTime.class

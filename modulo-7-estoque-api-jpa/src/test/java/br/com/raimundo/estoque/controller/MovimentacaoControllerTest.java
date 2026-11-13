@@ -34,9 +34,9 @@ class MovimentacaoControllerTest {
             throws Exception {
 
         when(
-                movimentacaoService.registrarSaida(1L, 100)
+                movimentacaoService.registrarSaida(1L, 100L)
         ).thenThrow(
-                new EstoqueInsuficienteException(10, 100)
+                new EstoqueInsuficienteException(10L, 100L)
         );
 
         String json = """
@@ -62,11 +62,11 @@ class MovimentacaoControllerTest {
             throws Exception {
 
         Movimentacao movimentacaoUm = new Movimentacao(
-                1L,10L, "SAIDA", 15, LocalDateTime.now());
+                1L,10L, "SAIDA", 15L, LocalDateTime.now());
         Movimentacao movimentacaoDois = new Movimentacao(
-                2L,20L, "ENTRADA", 20, LocalDateTime.now());
+                2L,20L, "ENTRADA", 20L, LocalDateTime.now());
         Movimentacao movimentacaoTres = new Movimentacao(
-                3L,30L, "SAIDA", 30, LocalDateTime.now());
+                3L,30L, "SAIDA", 30L, LocalDateTime.now());
 
         List<Movimentacao> movimentacaoList =
                 List.of(movimentacaoUm, movimentacaoDois, movimentacaoTres);

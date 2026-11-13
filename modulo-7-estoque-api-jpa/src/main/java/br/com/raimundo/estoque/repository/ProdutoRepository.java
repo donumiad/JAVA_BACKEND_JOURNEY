@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public interface ProdutoRepository {
 
     List<Produto> listarTodos();
@@ -19,7 +20,7 @@ public interface ProdutoRepository {
     boolean atualizar(Produto produto);
     boolean removerPorId(Long id);
 
-    boolean atualizarEstoque(Long id, Integer novoEstoque);
+    boolean atualizarEstoque(Long id, Long novoEstoque);
 
     List<Produto> buscarPaginado(
             String nome,

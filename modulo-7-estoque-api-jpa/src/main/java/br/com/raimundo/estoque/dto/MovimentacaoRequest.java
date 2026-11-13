@@ -6,4 +6,4 @@ import jakarta.validation.constraints.Positive;
 public record MovimentacaoRequest(
         @NotNull
         @Positive
-        Integer quantidade) { }
+        long quantidade) { }

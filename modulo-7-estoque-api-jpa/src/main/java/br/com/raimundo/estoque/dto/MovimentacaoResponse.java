@@ -8,7 +8,7 @@ public record MovimentacaoResponse(
         Long id,
         Long produtoId,
         String tipo,
-        Integer quantidade,
+        Long quantidade,
         LocalDateTime dataMovimentacao
 ) {
 

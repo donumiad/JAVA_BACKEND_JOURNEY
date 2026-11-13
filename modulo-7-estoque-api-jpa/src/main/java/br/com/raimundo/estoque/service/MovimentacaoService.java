@@ -36,7 +36,7 @@ public class MovimentacaoService {
     @Transactional
     public Optional<Movimentacao> registrarEntrada(
             Long produtoId,
-            Integer quantidade
+            Long quantidade
     ) {
 
 //        Optional<Produto> produtoEncontrado =
@@ -53,7 +53,7 @@ public class MovimentacaoService {
 
         //Produto produto = produtoEncontrado.get();
 
-        int novoEstoque =
+        Long novoEstoque =
                 produto.getEstoque() + quantidade;
 
         produtoRepository.atualizarEstoque(
@@ -104,7 +104,7 @@ public class MovimentacaoService {
     @Transactional
     public Optional<Movimentacao> registrarSaida(
             Long produtoId,
-            Integer quantidade
+            Long quantidade
     ) {
 
         Produto produto = produtoRepository.buscarPorId(produtoId)
@@ -126,7 +126,7 @@ public class MovimentacaoService {
             );
         }
 
-        int novoEstoque =
+        Long novoEstoque =
                 produto.getEstoque() - quantidade;
 
         produtoRepository.atualizarEstoque(

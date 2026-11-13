@@ -64,7 +64,7 @@ class ProdutoRepositoryIntegrationTest {
 
         assertEquals(salvo.getId(), recuperado.getId());
         assertEquals("Mouse de Integracao", recuperado.getNome());
-        assertEquals(10, recuperado.getEstoque());
+        assertEquals(10L, recuperado.getEstoque());
 
         assertEquals(
                 0,

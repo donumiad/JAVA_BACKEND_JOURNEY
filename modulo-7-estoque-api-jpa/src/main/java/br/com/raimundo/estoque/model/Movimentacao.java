@@ -8,13 +8,13 @@ public class Movimentacao {
     private Long id;
     private Long produtoId;
     private String tipo;
-    private Integer quantidade;
+    private Long quantidade;
     private LocalDateTime dataMovimentacao;
 
     public Movimentacao(
             Long produtoId,
             String tipo,
-            Integer quantidade
+            Long quantidade
     ) {
         this.produtoId = produtoId;
         this.tipo = tipo;
@@ -25,7 +25,7 @@ public class Movimentacao {
             Long id,
             Long produtoId,
             String tipo,
-            Integer quantidade,
+            Long quantidade,
             LocalDateTime dataMovimentacao
     ) {
         this.id = id;
@@ -47,7 +47,7 @@ public class Movimentacao {
         return tipo;
     }
 
-    public Integer getQuantidade() {
+    public Long getQuantidade() {
         return quantidade;
     }
 
