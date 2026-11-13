@@ -13,7 +13,7 @@ public interface ProdutoRepository {
 
     List<Produto> buscarPorNome(String nome);
 
-   // Produto salvar(Produto produto);
+    Produto salvar(Produto produto);
 
     boolean atualizar(Produto produto);
     boolean removerPorId(Long id);
