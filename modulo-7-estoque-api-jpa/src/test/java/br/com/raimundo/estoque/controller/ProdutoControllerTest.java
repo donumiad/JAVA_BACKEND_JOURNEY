@@ -41,7 +41,7 @@ class ProdutoControllerTest {
                 1L,
                 "Mouse",
                 new BigDecimal("100.00"),
-                10
+                10L
         );
 
         PaginaProduto pagina = new PaginaProduto(
@@ -90,7 +90,7 @@ class ProdutoControllerTest {
                 1L,
                 "Mouse",
                 new BigDecimal("100.00"),
-                10
+                10L
         );
 
         when(  //MOKITO
@@ -139,7 +139,7 @@ class ProdutoControllerTest {
                 10L,
                 "Teclado",
                 new BigDecimal("250.00"),
-                5
+                5L
         );
 
         when(  //MOKITO
@@ -216,7 +216,7 @@ class ProdutoControllerTest {
                 10L,
                 "Teclado",
                 new BigDecimal("250.00"),
-                5
+                5L
         );
 
         when(  //MOKITO - SIMULA O RETORNO DO SERVICE

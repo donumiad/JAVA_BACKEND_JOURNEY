@@ -45,7 +45,7 @@ class ProdutoRepositoryIntegrationTest {
                 null,
                 "Mouse de Integracao",
                 new BigDecimal("100.00"),
-                10
+                10L
         );
 
         // 3. Executar o INSERT real

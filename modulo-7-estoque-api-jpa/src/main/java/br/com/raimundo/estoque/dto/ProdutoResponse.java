@@ -17,7 +17,7 @@ public record ProdutoResponse(
         BigDecimal preco,
 
         @Schema(example = "10")
-        Integer estoque
+        Long estoque
 ) {
 
 

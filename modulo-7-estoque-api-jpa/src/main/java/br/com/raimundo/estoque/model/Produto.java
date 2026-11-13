@@ -45,6 +45,7 @@ public class Produto {
             BigDecimal preco,
             Long estoque
     ) {
+        this.id = id;
         this.nome = nome;
         this.preco = preco;
         this.estoque = estoque;
