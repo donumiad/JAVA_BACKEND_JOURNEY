@@ -32,4 +32,4 @@ public record ProdutoCreateRequest(
         )
         @NotNull
         @PositiveOrZero
-        Integer estoque){}
+        Long estoque){}

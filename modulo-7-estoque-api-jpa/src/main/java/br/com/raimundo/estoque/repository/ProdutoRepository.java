@@ -1,10 +1,12 @@
 package br.com.raimundo.estoque.repository;
 
 import br.com.raimundo.estoque.model.Produto;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public interface ProdutoRepository {
 
     List<Produto> listarTodos();
