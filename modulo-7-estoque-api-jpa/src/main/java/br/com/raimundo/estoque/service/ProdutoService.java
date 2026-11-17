@@ -75,9 +75,8 @@ public class ProdutoService {
                 atual.getEstoque()
         );
 
-        produtoRepository.atualizar(produtoAtualizado);
-
-        return Optional.of(produtoAtualizado);
+        boolean atualizado = produtoRepository.atualizar(produtoAtualizado);
+        return atualizado ? Optional.of(produtoAtualizado) : Optional.empty();
     }
 
     public boolean remover(Long id) {

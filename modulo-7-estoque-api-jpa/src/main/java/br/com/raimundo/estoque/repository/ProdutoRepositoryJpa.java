@@ -3,6 +3,7 @@ package br.com.raimundo.estoque.repository;
 import br.com.raimundo.estoque.model.Produto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,13 +43,30 @@ public class ProdutoRepositoryJpa implements ProdutoRepository {
     }
 
     @Override
-    public boolean atualizar(Produto produto) {
-        return false;
+    @Transactional
+    public boolean atualizar(Produto dadosNovos) {
+        Produto produtoGerenciado = entityManager.find(
+                Produto.class, dadosNovos.getId()
+        );
+
+        if (produtoGerenciado == null) {
+            return false;
+        }
+
+
+
+        produtoGerenciado.setNome(dadosNovos.getNome());
+        produtoGerenciado.setPreco(dadosNovos.getPreco());
+
+        return true;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Produto> listarTodos() {
-        return List.of();
+        return entityManager
+                .createQuery("select p from Produto p", Produto.class)
+                .getResultList();
     }
 
 
@@ -66,12 +84,56 @@ public class ProdutoRepositoryJpa implements ProdutoRepository {
     }
 
     @Override
-    public List<Produto> buscarPaginado(String nome, int page, int size, String sort, String direction) {
-        return List.of();
+    @Transactional(readOnly = true)
+    public List<Produto> buscarPaginado(
+            String nome, int page, int size, String sort, String direction
+    ) {
+        String atributo = switch (sort) { //VERIFICAR O VALOR DO SORT
+            case "id", "nome", "preco", "estoque" -> sort;
+            default -> throw new IllegalArgumentException(
+                    "Campo de ordenação inválido: " + sort
+            );
+        };
+
+        //VERIFICA O VALOR DO DIRECTION E VERIFICA SE O NOME É NULL OU ESTA EM BRANCO
+        String ordem = "desc".equalsIgnoreCase(direction) ? "desc" : "asc";
+        boolean filtrarPorNome = nome != null && !nome.isBlank();
+
+
+        String consulta = "select p from Produto p"; //BUSCA AS ENTIDADES PRODUTO CHAMDO DE P
+        if (filtrarPorNome) {
+            consulta += " where p.nome ilike :nome"; //SE O FILTRO PASSAR CONTINUA A CONSTRUÇÃO DO SQL
+        }
+        consulta += " order by p." + atributo + " " + ordem; //
+
+        TypedQuery<Produto> busca = entityManager.createQuery(consulta, Produto.class);
+
+        if (filtrarPorNome) {
+            busca.setParameter("nome", "%" + nome + "%");
+        }
+
+        busca.setFirstResult(Math.multiplyExact(page, size));
+        busca.setMaxResults(size);
+
+        return busca.getResultList();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public long contar(String nome) {
-        return 0;
+        boolean filtrarPorNome = nome != null && !nome.isBlank();
+
+        String consulta = "select count(p) from Produto p";
+        if (filtrarPorNome) {
+            consulta += " where p.nome ilike :nome";
+        }
+
+        TypedQuery<Long> contagem = entityManager.createQuery(consulta, Long.class);
+
+        if (filtrarPorNome) {
+            contagem.setParameter("nome", "%" + nome + "%");
+        }
+
+        return contagem.getSingleResult();
     }
 }
