@@ -8,6 +8,17 @@ import java.util.Objects;
 @Table(name = "produtos")
 public class Produto {
 
+    @Embedded
+    private Dimensoes dimensoes;
+
+    public Dimensoes getDimensoes() {
+        return dimensoes;
+    }
+
+    public void definirDimensoes(Dimensoes dimensoes) {
+        this.dimensoes = dimensoes;
+    }
+
     @Id
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,

@@ -1,8 +1,10 @@
 
 package br.com.raimundo.estoque.repository;
 
+import br.com.raimundo.estoque.model.Dimensoes;
 import br.com.raimundo.estoque.model.Produto;
-
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,6 +23,9 @@ import static org.junit.jupiter.api.Assertions.*;
 )
 @ActiveProfiles("test")
 class ProdutoRepositoryIntegrationTest {
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Autowired
     private ProdutoRepository produtoRepository;
@@ -48,8 +53,14 @@ class ProdutoRepositoryIntegrationTest {
                 10L
         );
 
+        Dimensoes medidas = new Dimensoes(20, 10, 30);
+        produto.definirDimensoes(medidas);
+
         // 3. Executar o INSERT real
-        Produto salvo = produtoRepository.salvar(produto);
+        Produto salvo = produtoRepository.salvar(produto);//entçao aqui o banco ainda não foi atualizado, pois o flush não aocnteceu?
+
+        entityManager.flush();
+        entityManager.clear();
 
         assertNotNull(salvo.getId());
 
@@ -58,6 +69,8 @@ class ProdutoRepositoryIntegrationTest {
                 produtoRepository.buscarPorId(salvo.getId());
 
         assertTrue(resultado.isPresent());
+
+        assertEquals(medidas, resultado.orElseThrow().getDimensoes());
 
         // 5. Verificar os dados recuperados
         Produto recuperado = resultado.orElseThrow();
