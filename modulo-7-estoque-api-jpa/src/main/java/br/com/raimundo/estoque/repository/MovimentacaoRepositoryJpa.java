@@ -1,0 +1,28 @@
+package br.com.raimundo.estoque.repository;
+
+import br.com.raimundo.estoque.model.Movimentacao;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public class MovimentacaoRepositoryJpa implements MovimentacaoRepository{
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Transactional
+    @Override
+    public Movimentacao salvar(Movimentacao movimentacao) {
+        entityManager.persist(movimentacao);
+        return movimentacao;
+    }
+
+    @Override
+    public List<Movimentacao> listarTodas() {
+        return List.of();
+    }
+}

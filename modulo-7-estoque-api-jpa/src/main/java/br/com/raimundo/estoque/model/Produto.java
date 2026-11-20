@@ -2,6 +2,8 @@ package br.com.raimundo.estoque.model;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -18,6 +20,9 @@ public class Produto {
     public void definirDimensoes(Dimensoes dimensoes) {
         this.dimensoes = dimensoes;
     }
+
+    @OneToMany(mappedBy = "produto")
+    private List<Movimentacao> movimentacoes = new ArrayList<>();
 
     @Id
     @GeneratedValue(
@@ -61,6 +66,8 @@ public class Produto {
         this.preco = preco;
         this.estoque = estoque;
     }
+
+    public List<Movimentacao> getMovimentacoes() {return movimentacoes;}
 
     public Long getId() {
         return id;

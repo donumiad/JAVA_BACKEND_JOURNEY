@@ -2,6 +2,7 @@
 package br.com.raimundo.estoque.repository;
 
 import br.com.raimundo.estoque.model.Dimensoes;
+import br.com.raimundo.estoque.model.Movimentacao;
 import br.com.raimundo.estoque.model.Produto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -14,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,6 +34,38 @@ class ProdutoRepositoryIntegrationTest {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Test
+    @Transactional
+    void deveCarregarProdutoDaMovimentacao() {
+        Produto mouse = new Produto(
+                null,
+                "Mouse da aula 8",
+                new BigDecimal("80.00"),
+                10L);
+        produtoRepository.salvar(mouse);
+        entityManager.flush();
+
+        Movimentacao entrada = Movimentacao.entrada(mouse, 2L);
+        entityManager.persist(entrada);
+        entityManager.flush();
+
+        Long movimentacaoId = entrada.getId();
+
+        entityManager.clear();
+
+        Movimentacao encontrada = entityManager.find(Movimentacao.class, movimentacaoId);
+
+        assertNotNull(encontrada);
+        Produto produtoDaMovimentacao = encontrada.getProduto();
+        assertNotNull(produtoDaMovimentacao);
+        assertEquals(mouse.getId(), produtoDaMovimentacao.getId());
+        assertEquals("Mouse da aula 8", produtoDaMovimentacao.getNome());
+
+        List<Movimentacao> historico = produtoDaMovimentacao.getMovimentacoes();
+        assertEquals(1, historico.size());
+        assertEquals(movimentacaoId, historico.get(0).getId());
+    }
 
     @Test
     @Transactional
