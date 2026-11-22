@@ -2,6 +2,7 @@ package br.com.raimundo.estoque.repository;
 
 import br.com.raimundo.estoque.model.Produto;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
@@ -22,6 +23,14 @@ public class ProdutoRepositoryJpa implements ProdutoRepository {
     @Override
     public Optional<Produto> buscarPorId(Long id) {
         Produto produto = entityManager.find(Produto.class, id);
+        return Optional.ofNullable(produto);
+    }
+
+    @Override
+    public Optional<Produto> buscarParaMovimentar(Long id) {
+        Produto produto = entityManager.find(
+                Produto.class, id, LockModeType.PESSIMISTIC_WRITE
+        );
         return Optional.ofNullable(produto);
     }
 }

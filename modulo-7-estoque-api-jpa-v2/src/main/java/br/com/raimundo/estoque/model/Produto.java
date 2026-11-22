@@ -65,6 +65,24 @@ public class Produto {
         this.dimensoes = dimensoes;
     }
 
+    public void adicionarEstoque(long quantidade) {
+        if (quantidade <= 0) {
+            throw new IllegalArgumentException("A quantidade deve ser maior que zero.");
+        }
+        this.estoque = Math.addExact(this.estoque, quantidade);
+    }
+
+    public boolean retirarEstoque(long quantidade) {
+        if (quantidade <= 0) {
+            throw new IllegalArgumentException("A quantidade deve ser maior que zero.");
+        }
+        if (quantidade > this.estoque) {
+            return false;
+        }
+        this.estoque -= quantidade;
+        return true;
+    }
+
     public Long getId() {
         return id;
     }

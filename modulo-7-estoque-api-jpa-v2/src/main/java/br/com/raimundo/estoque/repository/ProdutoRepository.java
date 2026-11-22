@@ -8,4 +8,6 @@ public interface ProdutoRepository {
     Produto cadastrar(Produto produto);
 
     Optional<Produto> buscarPorId(Long id);
+
+    Optional<Produto> buscarParaMovimentar(Long id);
 }
