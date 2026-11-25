@@ -35,6 +35,7 @@ public class MovimentacaoRepositoryJpa implements MovimentacaoRepository {
             where m.produto.id = :produtoId
             order by m.dataMovimentacao desc, m.id desc
             """, Movimentacao.class)
+
                 .setParameter("produtoId", produtoId)
                 .getResultList();
     }

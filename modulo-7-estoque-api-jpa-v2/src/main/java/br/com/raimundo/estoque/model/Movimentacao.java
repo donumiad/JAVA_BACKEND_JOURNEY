@@ -60,7 +60,7 @@ public class Movimentacao {
         if (produto == null) {
             throw new IllegalArgumentException("Informe o produto da movimentação.");
         }
-        if (quantidade <= 0) {
+        if (quantidade < 0) {
             throw new IllegalArgumentException("A quantidade deve ser maior que zero.");
         }
 
